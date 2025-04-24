@@ -14,8 +14,8 @@ class GroupResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'name' => $this->name,
-            'groupMembers' => GroupMemberResource::collection($this->groupMembers)->jsonOptions()
+            "id"=>$this->id,
+            'name' => $this->name
         ];
     }
 }
