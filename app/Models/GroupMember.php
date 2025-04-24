@@ -22,5 +22,10 @@ class GroupMember extends Pivot
     {
         return $this->role === 'admin';
     }
+
+    public function isAdminOrOwner()
+    {
+        return $this->role === 'admin' || $this->role === 'owner';
+    }
 }
 
