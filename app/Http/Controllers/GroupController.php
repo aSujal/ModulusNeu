@@ -43,19 +43,19 @@ class GroupController extends Controller
             }
 
             // Return the view with the prepared data
-            
             return Inertia::render('Groups/Edit', $data);
     }
 
     public function updateGroup(int $id, CreateOrUpdateGroupRequest $request): RedirectResponse
     {
-        $groupMember = GroupMember::findOrFail(Auth::user()->id);
-
+        // $groupMember = GroupMember::findOrFail(Auth::user()->id);
+        $groupMember =  GroupMember::where('user_id', Auth::user()->id)
+        ->where('group_id', $id)  // Match the group_id from the request
+        ->firstOrFail();
         if ($groupMember->isAdminOrOwner()) {
             Group::findOrFail($id)->update([
                 'name' => $request->validated()['name'],
             ]);
-
             return $this->backWith('success','Group Updated Successfully');
         }
 
