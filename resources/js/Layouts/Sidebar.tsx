@@ -8,6 +8,7 @@ import { router } from "@inertiajs/react";
 export default function Sidebar({ active = false, className = "", ...props }) {
     const user = usePage().props.auth.user;
     const groups = usePage().props.groups as Group[] || [];
+    console.log(groups)
     return (
         <aside
             id="logo-sidebar"
