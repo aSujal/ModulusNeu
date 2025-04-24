@@ -4,6 +4,7 @@ import { Input } from "../ui/input";
 // import { Ziggy } from '@/ziggy';
 import { useForm } from "@inertiajs/react";
 import { Button } from "../ui/button";
+import {toast} from "sonner";
 interface CreateGroupModalProps {
     open: boolean;
     onClose: () => void;
@@ -17,7 +18,9 @@ const CreateGroupModal = ({ open, onClose }: CreateGroupModalProps) => {
         e.preventDefault();
         // submit("POST", "groups/create");
         post(route("create.group"), {
-            onSuccess: () => {
+            onSuccess: (data) => {
+                console.log(data)
+                toast.success(data.props.notification.message);
                 reset(); // reset form data
                 onClose(); // close modal
             },

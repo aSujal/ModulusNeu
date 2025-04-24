@@ -3,45 +3,6 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import { Group } from "@/types";
 
-// Mock group data
-const mockGroups: Group[] = [
-    {
-        id: 1,
-        name: "Design Team",
-        image: "https://source.unsplash.com/400x300/?design,team",
-    },
-    {
-        id: 2,
-        name: "Marketing Crew",
-        image: "https://source.unsplash.com/400x300/?marketing,office",
-    },
-    {
-        id: 3,
-        name: "Developers",
-        image: "https://source.unsplash.com/400x300/?coding,developers",
-    },
-    {
-        id: 5,
-        name: "Product Managers",
-        image: "https://source.unsplash.com/400x300/?productivity,teamwork",
-    },
-    {
-        id: 6,
-        name: "Product Managers",
-        image: "https://source.unsplash.com/400x300/?productivity,teamwork",
-    },
-    {
-        id: 7,
-        name: "Product Managers",
-        image: "https://source.unsplash.com/400x300/?productivity,teamwork",
-    },
-    {
-        id: 8,
-        name: "Product Managers",
-        image: "https://source.unsplash.com/400x300/?productivity,teamwork",
-    },
-];
-
 const Index = ({ groups }: { groups: Group[] }) => {
     console.log(groups);
     return (

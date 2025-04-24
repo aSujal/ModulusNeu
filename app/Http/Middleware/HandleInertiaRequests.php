@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\GroupResource;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -29,11 +31,14 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = User::with('ownedGroups.groupMembers')->findOrFail($request->user()->id);
         return [
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
             ],
+            'notification' => session('notification'),
+            'groups' => GroupResource::collection($user->ownedGroups)->jsonSerialize()
         ];
     }
 }

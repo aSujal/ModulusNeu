@@ -18,4 +18,10 @@ export type PageProps<
     auth: {
         user: User;
     };
+
+    notification: {
+        type: "error" | "warning" | "success";
+        message: string;
+        data: any;
+    }
 };
