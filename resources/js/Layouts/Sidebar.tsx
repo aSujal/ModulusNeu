@@ -4,11 +4,13 @@ import GroupSwitcher from "@/Components/GroupSwitcher";
 import SidebarButton from "@/Components/layout/SidebarItem";
 import { Group } from "@/types";
 import { router } from "@inertiajs/react";
+import { useEffect } from "react";
 
 export default function Sidebar({ active = false, className = "", ...props }) {
     const user = usePage().props.auth.user;
     const groups = usePage().props.groups as Group[] || [];
     console.log(groups)
+
     return (
         <aside
             id="logo-sidebar"
@@ -16,12 +18,6 @@ export default function Sidebar({ active = false, className = "", ...props }) {
             aria-label="Sidebar"
         >
             <GroupSwitcher groups={groups} />
-            <SidebarButton
-                icon={Home}
-                label="Home"
-                onClick={() => router.visit(route("dashboard"))}
-                isActive={route().current("dashboard")}
-            />
             <div className="flex flex-col gap-3 mt-auto w-full">
                 <SidebarButton
                     className="bg-slate-200 dark:bg-slate-700 text-black dark:text-white"
