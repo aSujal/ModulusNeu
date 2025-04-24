@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { Info, Search } from 'lucide-react'
+import { BookPlus, Info, Search } from 'lucide-react'
 import { Button } from '@/Components/ui/button';
 import { usePage } from '@inertiajs/react';
 import { Group } from '@/types';
+import JoinGroupModal from '@/Components/groups/JoinGroupModal';
 
 
 const Toolbar = () => {
@@ -23,10 +24,20 @@ const Toolbar = () => {
 
     return (
         <>
-            <nav className='flex justify-between items-center bg-[#1a1a1a] p-1.5'>
-                <div className='flex-1' />
+            <JoinGroupModal open={open} onClose={() => setOpen(false)}/>
+            <nav className='flex justify-between items-center bg-[#0e0e12] p-1.5'>
+                <div className='flex-1'>
+                    <div>
+                        <a
+                            href={route("dashboard")}
+                            className="flex items-center mb-5 ps-2.5"
+                        >
+                            <i className="mr-2 text-primary text-2xl fa-solid fa-graduation-cap"></i>
+                        </a>
+                    </div>
+                </div>
                 <div className='min-w-[280px] max-[642px] grow-[2] shrink'>
-                    <Button size={"sm"} className='justify-start bg-accent/25 hover:bg-accent/25 px-2 w-full h-7 text-white' onClick={() => setOpen(true)}>
+                    <Button size={"sm"} className='justify-start bg-accent/25 hover:bg-accent/25 px-2 w-full h-7 text-white' >
                         <Search className='mr-2 w-4 h-4' />
                         <span className='flex items-center gap-1 text-xs'>
                             Search Groups
@@ -37,8 +48,8 @@ const Toolbar = () => {
                     </Button>
                 </div>
                 <div className='flex flex-1 justify-end items-center ml-auto'>
-                    <Button className='text-white'>
-                        <Info className='size-5' />
+                    <Button variant="secondary" className='text-white' onClick={() => setOpen(true)}>
+                        <BookPlus className='size-5'  />
                     </Button>
                 </div>
             </nav>

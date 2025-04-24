@@ -1,7 +1,3 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import Dropdown from '@/Components/Dropdown';
-import NavLink from '@/Components/NavLink';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 import Sidebar from './Sidebar';
@@ -18,7 +14,7 @@ export default function Authenticated({
     return (
         <div className='h-full'>
             <Toolbar />
-            <div className="flex bg-background h-[calc(100vh-44px)]">
+            <div className="flex bg-background h-[calc(100vh-64px)]">
                 <Sidebar />
                 <main>{children}</main>
             </div>
