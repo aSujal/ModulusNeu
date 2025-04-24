@@ -34,14 +34,16 @@ class GroupController extends Controller
 
             // If the user is a member and the user is either the admin or owner
             if ($groupMember && $groupMember->pivot->role === 'admin' || $groupMember->pivot->role === 'owner') {
-                // Load the relevant group members (e.g., owners/admins) only if the user is the owner/admin
+                
+                // Aber wir bekommen auch den Benutzer der die Anfrage sendet
                 $data['groupMembers'] = GroupMemberResource::collection(
-                    $group->groupMembers()->where('role', 'owner') // Assuming you have a `role` column
-                    ->get()
+                    $group->groupMembers()->get()
                 )->jsonSerialize();
+                
             }
 
             // Return the view with the prepared data
+            
             return Inertia::render('Groups/Edit', $data);
     }
 
