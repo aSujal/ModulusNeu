@@ -2,24 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class GroupMember extends Model
+class GroupMember extends Pivot
 {
-    //
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    protected $fillable = [
+        'user_id',
+        'group_id',
+        'role',
+    ];
 
-    public function groups()
+    // Optionally, add methods for role checking
+    public function isOwner(): bool
     {
-        return $this->belongsToMany(Group::class);
-    }
-
-    public function isAdminOrOwner(): bool
-    {
-        return $this->role === 'admin' || $this->role === 'owner';
+        return $this->role === 'owner';
     }
 
     public function isAdmin(): bool
@@ -27,3 +23,4 @@ class GroupMember extends Model
         return $this->role === 'admin';
     }
 }
+

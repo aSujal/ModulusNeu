@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('group_members', function (Blueprint $table) {
             $table->id();
-            $table->string("role");
-            $table->foreignId("user_id")->constrained()->onDelete('cascade');
-            $table->foreignId("group_id")->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('group_id')->constrained()->onDelete('cascade');
+            $table->string('role')->default('user'); // Role in the group (owner, admin, user)
             $table->timestamps();
         });
     }
