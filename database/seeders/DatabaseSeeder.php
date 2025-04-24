@@ -37,8 +37,6 @@ class DatabaseSeeder extends Seeder
                     $user->id,
                     ['role' => 'user']
                 );
-
-                
             }
         }
 
