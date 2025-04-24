@@ -54,7 +54,7 @@ class GroupController extends Controller
 
     public function createGroup(CreateOrUpdateGroupRequest $request): RedirectResponse
     {
-        $group = Group::create([
+        $group = Auth::user()->groups()->create([
             'name' => $request->validated()['name']
         ]);
 
