@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Group extends Model
 {
@@ -39,5 +40,10 @@ class Group extends Model
     public function tasks()
     {
         return $this->hasMany(Task::class);
+    }
+
+    public function invitationCode(): HasOne
+    {
+        return $this->hasOne(InvitationCode::class);
     }
 }
