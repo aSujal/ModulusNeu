@@ -5,6 +5,7 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 import Sidebar from './Sidebar';
+import Toolbar from './Toolbar';
 
 export default function Authenticated({
     children,
@@ -15,9 +16,12 @@ export default function Authenticated({
         useState(false);
 
     return (
-        <div className="flex bg-background h-[100vh]">
-            <Sidebar />
-            <main>{children}</main>
+        <div className='h-full'>
+            <Toolbar />
+            <div className="flex bg-background h-[calc(100vh-44px)]">
+                <Sidebar />
+                <main>{children}</main>
+            </div>
         </div>
     );
 }
