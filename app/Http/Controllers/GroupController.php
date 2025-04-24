@@ -17,7 +17,7 @@ class GroupController extends Controller
 {
     public function showUserGroup(int $id): InertiaResponse
     {
-        $group = Group::with('group_members')->findOrFail($id);
+        $group = Group::with('groupMembers')->findOrFail($id);
 
         return Inertia::render('User/Groups/Edit', [
             'group' => GroupResource::make($group),
