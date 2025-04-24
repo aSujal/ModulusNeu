@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateOrUpdateGroupRequest;
+use App\Http\Resources\GroupMemberResource;
 use App\Http\Resources\GroupResource;
 use App\Models\Group;
 use App\Models\GroupMember;
@@ -17,11 +18,31 @@ class GroupController extends Controller
 {
     public function showUserGroup(int $id): InertiaResponse
     {
-        $group = Group::with('groupMembers')->findOrFail($id);
+            // Fetch the group by ID
+            $group = Group::findOrFail($id);
 
-        return Inertia::render('User/Groups/Edit', [
-            'group' => GroupResource::make($group),
-        ]);
+            // Prepare the data to be passed to the view
+            $data = [
+                'group' => GroupResource::make($group)->jsonSerialize(),
+            ];
+
+            // Check if the authenticated user is a member of the group and is an owner/admin
+            $user = Auth::user();
+            
+            // Find the user's group membership
+            $groupMember = $group->groupMembers()->where('user_id', $user->id)->first();
+
+            // If the user is a member and the user is either the admin or owner
+            if ($groupMember && $groupMember->pivot->role === 'admin' || $groupMember->pivot->role === 'owner') {
+                // Load the relevant group members (e.g., owners/admins) only if the user is the owner/admin
+                $data['groupMembers'] = GroupMemberResource::collection(
+                    $group->groupMembers()->where('role', 'owner') // Assuming you have a `role` column
+                    ->get()
+                )->jsonSerialize();
+            }
+
+            // Return the view with the prepared data
+            return Inertia::render('Groups/Edit', $data);
     }
 
     public function updateGroup(int $id, CreateOrUpdateGroupRequest $request): RedirectResponse
