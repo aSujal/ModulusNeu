@@ -1,0 +1,45 @@
+.theme-switch-container {
+    position: relative;
+    height: 100%;
+    width: 20px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    background-color: var(--primary);
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+}
+
+.theme-switch-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: 50% 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.theme-switch-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: 50% 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    opacity: 0;
+}
+
+.theme-switch-container:hover {
+    width: 80px;
+}
+
+.theme-switch-container:hover .theme-switch-icon {
+    transform: translate(-150%, -50%);
+    opacity: 0;
+}
+
+.theme-switch-container:hover .theme-switch-content {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
