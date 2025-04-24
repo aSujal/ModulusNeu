@@ -50,7 +50,7 @@ class GroupController extends Controller
     {
         // $groupMember = GroupMember::findOrFail(Auth::user()->id);
         $groupMember =  GroupMember::where('user_id', Auth::user()->id)
-        ->where('group_id', $id)  // Match the group_id from the request
+        ->where('group_id', $id)
         ->firstOrFail();
         if ($groupMember->isAdminOrOwner()) {
             Group::findOrFail($id)->update([
@@ -64,15 +64,15 @@ class GroupController extends Controller
 
     public function deleteGroup(int $id): RedirectResponse
     {
-        $groupMember = GroupMember::findOrFail(Auth::user()->id);
+        $groupMember = GroupMember::where('user_id', Auth::user()->id)->where('group_id', $id)->firstOrFail();
 
-        if ($groupMember->isAdmin()) {
+        if ($groupMember->isOwner()) {
             Group::destroy($id);
 
-            return $this->redirectWith('success','Group deleted Successfully', 'user.groups');
+            return $this->redirectWith('success','Group deleted Successfully', 'dashboard');
         }
 
-        return $this->redirectWith('error','You are not Admin or Owner', 'dashboard');
+        return $this->redirectWith('error','You are not Owner', 'dashboard');
     }
 
     public function createGroup(CreateOrUpdateGroupRequest $request): RedirectResponse

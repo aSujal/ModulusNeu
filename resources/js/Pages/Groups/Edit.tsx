@@ -61,10 +61,20 @@ export default function Edit({ group, groupMembers }: { group: Group; groupMembe
       await router.delete(`/groups/${group.id}/members/${memberId}`,{});
     } catch (error) {
       console.error("Error deleting member:", error);
-      
+
       setMembers(prevState => [...prevState]);
     }
   };
+  const handleDeleteGroup = async () => {
+    const confirmDelete = confirm("Are you sure you want to delete this group? This action cannot be undone.");
+    if (!confirmDelete) return;
+
+    try {
+      await router.delete(`/groups/${group.id}`);
+    } catch (error) {
+      console.error("Error deleting group:", error);
+    }
+  };    
 
   return (
     <AuthenticatedLayout>
@@ -92,6 +102,12 @@ export default function Edit({ group, groupMembers }: { group: Group; groupMembe
               className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition duration-200"
             >
               Save Group Name
+            </button>
+            <button
+              onClick={handleDeleteGroup}
+              className="px-6 py-2 bg-red-600 text-white font-semibold rounded-md hover:bg-red-700 transition duration-200"
+            >
+              Delete Group
             </button>
           </div>
         </div>
