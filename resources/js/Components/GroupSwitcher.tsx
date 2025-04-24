@@ -15,6 +15,7 @@ interface GroupSwitcherProps {
     groups: Group[];
 }
 const GroupSwitcher = ({ groups }: GroupSwitcherProps) => {
+    console.log(groups)
     const [currentGroup, setCurrentGroup] = useState<Group>(groups[0]);
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -54,7 +55,6 @@ const GroupSwitcher = ({ groups }: GroupSwitcherProps) => {
                         </span>
                     </DropdownMenuItem>
                     {groups
-                        .filter((group) => group.id !== currentGroup.id)
                         .map((group) => (
                             <DropdownMenuItem
                                 key={group?.id}
