@@ -32,9 +32,10 @@ export default function Edit({ group, groupMembers }: { group: Group; groupMembe
 
     // Send the POST request for the role change
     try {
-      await router.post(`/groups/${group.id}/update-role`, {
-        memberId,
-        role: newRole,
+      await router.post(`/groups/update-user-role`, {
+        group_id : group.id,
+        user_id : memberId,
+        new_role : newRole,
       });
     } catch (error) {
       console.error("Error updating role:", error);
@@ -49,6 +50,19 @@ export default function Edit({ group, groupMembers }: { group: Group; groupMembe
       await router.put(`/groups/${group.id}`, { name: groupName });
     } catch (error) {
       console.error("Error updating group name:", error);
+    }
+  };
+
+  const handleDeleteMember = async (memberId: number) => {
+
+    setMembers(members.filter(member => member.id !== memberId));
+
+    try {
+      await router.delete(`/groups/${group.id}/members/${memberId}`,{});
+    } catch (error) {
+      console.error("Error deleting member:", error);
+      
+      setMembers(prevState => [...prevState]);
     }
   };
 
@@ -102,6 +116,16 @@ export default function Edit({ group, groupMembers }: { group: Group; groupMembe
                     <option value="owner">Owner</option>
                     <option value="user">User</option>
                   </select>
+
+                  {/* Delete Button */}
+                  <button
+                    onClick={() => handleDeleteMember(member.id)}
+                    className="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition duration-200"
+                  >
+                    Delete
+                  </button>
+
+
                 </div>
               </div>
             ))}
