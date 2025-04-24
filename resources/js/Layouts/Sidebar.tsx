@@ -1,4 +1,4 @@
-import { GraduationCap, GraduationCapIcon, Home, LogOut } from "lucide-react";
+import { Home, LogOut } from "lucide-react";
 import { usePage } from "@inertiajs/react";
 import GroupSwitcher from "@/Components/GroupSwitcher";
 import SidebarButton from "@/Components/layout/SidebarItem";
@@ -19,7 +19,7 @@ export default function Sidebar({ active = false, className = "", ...props }) {
                     href={route("dashboard")}
                     className="flex items-center mb-5 ps-2.5"
                 >
-                    <GraduationCapIcon className="mr-2 text-primary text-2xl"/>
+                    <i className="mr-2 text-primary text-2xl fa-solid fa-graduation-cap"></i>
                 </a>
             </div>
             <GroupSwitcher groups={groups} />
