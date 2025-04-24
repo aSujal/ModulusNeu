@@ -1,0 +1,55 @@
+volumes:
+  redis_data:
+
+services:
+  database:
+    image: mysql:8.4
+    container_name: mysql_modulus
+    environment:
+      - MYSQL_DATABASE=modulus
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=secret
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - /var/backups/mysql8/modulus:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  app:
+    container_name: php_modulus
+    image: webdevops/php-nginx:8.3-alpine
+    volumes:
+      - .:/var/www
+      - ./docker/nginx/main.conf:/opt/docker/etc/nginx/main.conf
+    ports:
+      - "8084:80"
+    links:
+      - database
+      - redis
+    working_dir: /var/www
+    hostname: localhost
+    environment:
+      DB_PORT: "3306"
+      DB_HOST: database
+      DB_PASSWORD: secret
+      DB_DATABASE: modulus
+      REDIS_ENDPOINT: redis
+
+  node:
+    container_name: modulus_frontend
+    image: node:lts
+    working_dir: /var/www
+    command: bash -c "npm i && npm run dev -- --port 8080 --host"
+    volumes:
+      - .:/var/www
+    ports:
+      - "8787:8080"
+    user: node
+    hostname: localhost
+
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
