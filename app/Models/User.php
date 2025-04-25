@@ -56,6 +56,8 @@ class User extends Authenticatable
         $groupMember = GroupMember::where('user_id', $this->id)
             ->where('group_id', $groupId)
             ->firstOrFail();
+
+        return $groupMember->pivot->role === 'admin' || $groupMember->pivot->role === 'owner';
     }
 
 }

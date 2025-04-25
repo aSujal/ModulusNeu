@@ -14,7 +14,7 @@ use \Inertia\Response as InertiaResponse;
 
 class PostController extends Controller
 {
-    public function create(int $groupId, CreateOrUpdatePostRequest $request): RedirectResponse
+    public function create(int $groupId, CreateOrUpdatePostRequest $request)
     {
         $validated = $request->validated();
         $post = Group::findOrFail($groupId)->posts()->create([
@@ -24,11 +24,9 @@ class PostController extends Controller
             "publish_at" => Carbon::parse($validated["publish_at"])->toDateTimeString(),
         ]);
 
-        return $this->redirectWith(
+        return $this->backWith(
             'success',
-            'Post created successfully',
-            'post.show-edit-page',
-            ['groupId' => $groupId, 'postId' => $post->id]
+            'Post created successfully'
         );
     }
 

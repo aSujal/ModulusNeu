@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Group;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,9 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::factory(1000)->create();
+        $users = User::factory(50)->create();
 
-        foreach (range(1, 100) as $index) {
+        foreach (range(1, 10) as $index) {
             /**@var User $owner*/
             $owner = $users->random();
 
@@ -23,6 +25,16 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Group ' . $index,
                 'user_id' => $owner->id,
             ]);
+
+            foreach (range(1, 20) as $index) {
+                $group->posts()->create([
+                    'title' => "sdgikdsfjghjkf",
+                    'status' => "öffentlich",
+                    'description' => "hsadglkhsdlkghdsflkghdlsfkghdfklpughdkjghd",
+                    'publish_at' => Carbon::now()->addDays(rand(1,50))
+                ]);
+            }
+
 
             $group->groupMembers()->attach(
                 $owner->id,

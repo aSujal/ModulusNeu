@@ -13,6 +13,7 @@ class Post extends Model
         'publish_at',
         'type',
         'group_id',
+        'description'
     ];
     public function group()
      {
