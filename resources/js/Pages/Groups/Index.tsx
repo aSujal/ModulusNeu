@@ -82,8 +82,10 @@ export default function Index({ group }: { group: Group; }) {
     <AuthenticatedLayout>
       <Head title={`Edit Group: ${groupName}`} />
       <GroupLayout group={group}>
-        <PostsList group={group} />
-        <Button onClick={handlePost} />
+        <div className='flex flex-col gap-4 w-full'>
+          <PostsList group={group} />
+          <Button onClick={handlePost} />
+        </div>
       </GroupLayout>
     </AuthenticatedLayout>
   );

@@ -34,19 +34,6 @@ const PostsList = ({
             return groups;
         }, {} as Record<string, typeof group.posts>
     );
-
-    // const groupedMessages = data?.reduce(
-    //     (groups, message) => {
-    //         const date = new Date(message._creationTime);
-    //         const dataKey = format(date, "yyyy-MM-dd");
-    //         if (!groups[dataKey]) {
-    //             groups[dataKey] = []
-    //         }
-    //         groups[dataKey].unshift(message)
-    //         return groups;
-    //     }, {} as Record<string, typeof data>
-    // );
-
     return (
         <div className='flex flex-col-reverse flex-1 pb-4 overflow-y-auto messages-scrollbar'>
             {Object.entries(groupedPosts || {}).map(([dateKey, posts]) => (
