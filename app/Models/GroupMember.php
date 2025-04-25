@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class GroupMember extends Pivot
 {
+    protected $table = 'group_members';
     protected $fillable = [
         'user_id',
         'group_id',

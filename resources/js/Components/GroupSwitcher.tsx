@@ -22,6 +22,7 @@ const GroupSwitcher = ({ groups }: GroupSwitcherProps) => {
 
     const handleSwitch = (group: Group) => {
         setLoading(true);
+        console.log(group   )
         router.visit(`/groups/${group.id}`, {
             onStart: () => setLoading(true),
             onFinish: () => setLoading(false),

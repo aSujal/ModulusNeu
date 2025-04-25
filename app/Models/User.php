@@ -49,5 +49,6 @@ class User extends Authenticatable
     {
         return $this->id === $group->user_id;
     }
+    
 }
 

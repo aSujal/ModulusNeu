@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateOrUpdateGroupRequest;
+use App\Http\Resources\GroupMemberResource;
 use App\Http\Resources\GroupResource;
 use App\Models\Group;
 use App\Models\GroupMember;
@@ -17,22 +18,44 @@ class GroupController extends Controller
 {
     public function showUserGroup(int $id): InertiaResponse
     {
-        $group = Group::with('groupMembers')->findOrFail($id);
+            // Fetch the group by ID
+            $group = Group::findOrFail($id);
 
-        return Inertia::render('User/Groups/Edit', [
-            'group' => GroupResource::make($group),
-        ]);
+            // Prepare the data to be passed to the view
+            $data = [
+                'group' => GroupResource::make($group)->jsonSerialize(),
+            ];
+
+            // Check if the authenticated user is a member of the group and is an owner/admin
+            $user = Auth::user();
+            
+            // Find the user's group membership
+            $groupMember = $group->groupMembers()->where('user_id', $user->id)->first();
+
+            // If the user is a member and the user is either the admin or owner
+            if ($groupMember && $groupMember->pivot->role === 'admin' || $groupMember->pivot->role === 'owner') {
+                
+                // Aber wir bekommen auch den Benutzer der die Anfrage sendet
+                $data['groupMembers'] = GroupMemberResource::collection(
+                    $group->groupMembers()->get()
+                )->jsonSerialize();
+                
+            }
+
+            // Return the view with the prepared data
+            return Inertia::render('Groups/Edit', $data);
     }
 
     public function updateGroup(int $id, CreateOrUpdateGroupRequest $request): RedirectResponse
     {
-        $groupMember = GroupMember::findOrFail(Auth::user()->id);
-
+        // $groupMember = GroupMember::findOrFail(Auth::user()->id);
+        $groupMember =  GroupMember::where('user_id', Auth::user()->id)
+        ->where('group_id', $id)
+        ->firstOrFail();
         if ($groupMember->isAdminOrOwner()) {
             Group::findOrFail($id)->update([
                 'name' => $request->validated()['name'],
             ]);
-
             return $this->backWith('success','Group Updated Successfully');
         }
 
@@ -41,15 +64,15 @@ class GroupController extends Controller
 
     public function deleteGroup(int $id): RedirectResponse
     {
-        $groupMember = GroupMember::findOrFail(Auth::user()->id);
+        $groupMember = GroupMember::where('user_id', Auth::user()->id)->where('group_id', $id)->firstOrFail();
 
-        if ($groupMember->isAdmin()) {
+        if ($groupMember->isOwner()) {
             Group::destroy($id);
 
-            return $this->redirectWith('success','Group deleted Successfully', 'user.groups');
+            return $this->redirectWith('success','Group deleted Successfully', 'dashboard');
         }
 
-        return $this->redirectWith('error','You are not Admin or Owner', 'dashboard');
+        return $this->redirectWith('error','You are not Owner', 'dashboard');
     }
 
     public function createGroup(CreateOrUpdateGroupRequest $request): RedirectResponse
@@ -65,7 +88,7 @@ class GroupController extends Controller
 
     public function createInvitationCode(int $id): RedirectResponse
     {
-        $groupMember = GroupMember::findOrFail(Auth::user()->id);
+        $groupMember = GroupMember::where('user_id', Auth::user()->id)->where('group_id', $id)->firstOrFail();
 
         if (!$groupMember->isAdminOrOwner()) {
             return $this->backWith('error','You are not Admin or Owner');
