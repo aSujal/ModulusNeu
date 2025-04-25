@@ -5,19 +5,21 @@ import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu'
 import { Button } from '../ui/button'
 import { Group } from '@/types'
 import { group } from 'console'
+import PreferencesModal from './PreferencesModal'
+import InviteModal from './InviteModal'
 
 interface GroupHeaderProps {
     group: Group
 }
 
-const WorkspaceHeader = ({ group }: GroupHeaderProps) => {
+const GroupHeader = ({ group }: GroupHeaderProps) => {
     const [preferencesOpen, setPreferencesOpen] = React.useState(false);
     const [inviteOpen, setInviteOpen] = React.useState(false);
     const isAdmin = true
     return (
         <>
-            {/* <InviteModal open={inviteOpen} setOpen={setInviteOpen} id={workspace._id} name={workspace.name} joinCode={workspace.joinCode} /> */}
-            {/* <PreferencesModal open={preferencesOpen} setOpen={setPreferencesOpen} initialValue={workspace.name} id={workspace._id} /> */}
+            <InviteModal open={inviteOpen} setOpen={setInviteOpen} name={group.name} /> 
+             <PreferencesModal open={preferencesOpen} setOpen={setPreferencesOpen} initialValue={group.name} groupId={group.id} /> 
             <div className='flex items-center justify-between px-4 h-[49px] gap-0.5'>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -54,4 +56,4 @@ const WorkspaceHeader = ({ group }: GroupHeaderProps) => {
     )
 }
 
-export default WorkspaceHeader
+export default GroupHeader

@@ -1,6 +1,7 @@
 import { AlertTriangle, HashIcon, Loader, MessageSquareText, SendHorizonal } from 'lucide-react';
 import { Group } from '@/types';
 import SidebarButton from '../layout/SidebarItem';
+import GroupHeader from './GroupHeader';
 
 interface GroupSidebar {
     group: Group;
@@ -27,7 +28,7 @@ const GroupSidebar = ({ group }: GroupSidebar) => {
     return (
         <div className='flex flex-col bg-[#5E2C5F] h-full'>
             <div className='flex flex-col mt-3 px-2'>
-                <GroupSidebar group={group}/>
+                <GroupHeader group={group} />
                 <SidebarButton icon={SendHorizonal} label="Draft & Sent" onClick={() => ""} />
                 <SidebarButton icon={MessageSquareText} label="Threads" onClick={() => ""} />
             </div>
