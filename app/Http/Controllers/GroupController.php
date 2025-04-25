@@ -110,12 +110,17 @@ class GroupController extends Controller
 
     public function joinGroup(string $code): RedirectResponse
     {
-        $invitationCode = InvitationCode::whereCode($code)->with('group')->firstOrFail();
+        // $invitationCode = InvitationCode::whereCode($code)->with('group')->firstOrFail();
+        $invitationCode = InvitationCode::whereCode($code)->with('group')->first();
 
+        if (!$invitationCode) {
+            return $this->backWith('error', 'Invitation Code is invalid');
+        }
+        
         if ($invitationCode->expires_at < now()) {
             $invitationCode->delete();
 
-            return $this->backWith('success', 'Invitation Code is expired or invalid');
+            return $this->backWith('error', 'Invitation Code is expired or invalid');
         }
 
         if ($invitationCode->group->groupMembers()->whereUserId(Auth::id())->exists()) {
@@ -124,6 +129,6 @@ class GroupController extends Controller
 
         $invitationCode->group->groupMembers()->attach(Auth::id(), ['role' => 'user']);
 
-        return $this->backWith('error', 'Group joined successfully');
+        return $this->backWith('success', 'Group joined successfully');
     }
 }
