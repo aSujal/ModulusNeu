@@ -88,7 +88,7 @@ class GroupController extends Controller
 
     public function createInvitationCode(int $id): RedirectResponse
     {
-        $groupMember = GroupMember::findOrFail(Auth::user()->id);
+        $groupMember = GroupMember::where('user_id', Auth::user()->id)->where('group_id', $id)->firstOrFail();
 
         if (!$groupMember->isAdminOrOwner()) {
             return $this->backWith('error','You are not Admin or Owner');
