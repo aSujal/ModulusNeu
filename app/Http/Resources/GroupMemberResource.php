@@ -12,8 +12,9 @@ class GroupMemberResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'role' => $this->role,
-            'user' => $this->user
+            "id" => $this->id,
+            'role' => $this->role ?? $this->pivot->role,
+            'user' => $this->user ?? $this->full_name
         ];
     }
 }

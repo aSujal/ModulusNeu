@@ -34,11 +34,12 @@ class GroupController extends Controller
 
             // If the user is a member and the user is either the admin or owner
             if ($groupMember && $groupMember->pivot->role === 'admin' || $groupMember->pivot->role === 'owner') {
-                // Load the relevant group members (e.g., owners/admins) only if the user is the owner/admin
+                
+                // Aber wir bekommen auch den Benutzer der die Anfrage sendet
                 $data['groupMembers'] = GroupMemberResource::collection(
-                    $group->groupMembers()->where('role', 'owner') // Assuming you have a `role` column
-                    ->get()
+                    $group->groupMembers()->get()
                 )->jsonSerialize();
+                
             }
 
             // Return the view with the prepared data
@@ -47,13 +48,14 @@ class GroupController extends Controller
 
     public function updateGroup(int $id, CreateOrUpdateGroupRequest $request): RedirectResponse
     {
-        $groupMember = GroupMember::findOrFail(Auth::user()->id);
-
+        // $groupMember = GroupMember::findOrFail(Auth::user()->id);
+        $groupMember =  GroupMember::where('user_id', Auth::user()->id)
+        ->where('group_id', $id)
+        ->firstOrFail();
         if ($groupMember->isAdminOrOwner()) {
             Group::findOrFail($id)->update([
                 'name' => $request->validated()['name'],
             ]);
-
             return $this->backWith('success','Group Updated Successfully');
         }
 
@@ -62,15 +64,15 @@ class GroupController extends Controller
 
     public function deleteGroup(int $id): RedirectResponse
     {
-        $groupMember = GroupMember::findOrFail(Auth::user()->id);
+        $groupMember = GroupMember::where('user_id', Auth::user()->id)->where('group_id', $id)->firstOrFail();
 
-        if ($groupMember->isAdmin()) {
+        if ($groupMember->isOwner()) {
             Group::destroy($id);
 
-            return $this->redirectWith('success','Group deleted Successfully', 'user.groups');
+            return $this->redirectWith('success','Group deleted Successfully', 'dashboard');
         }
 
-        return $this->redirectWith('error','You are not Admin or Owner', 'dashboard');
+        return $this->redirectWith('error','You are not Owner', 'dashboard');
     }
 
     public function createGroup(CreateOrUpdateGroupRequest $request): RedirectResponse
