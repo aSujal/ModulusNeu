@@ -10,7 +10,15 @@ export interface Group {
     id: number;
     name: string;
     image?: string | null;
+    groupMembers: GroupMember[];
+
 };
+
+export interface GroupMember {
+    id: number;
+    role: string;
+    user: string;
+}
 
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
