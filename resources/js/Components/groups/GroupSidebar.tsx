@@ -26,27 +26,26 @@ const GroupSidebar = ({ group }: GroupSidebar) => {
     }
 
     return (
-        <div className='flex flex-col bg-[#5E2C5F] h-full'>
-            <div className='flex flex-col mt-3 px-2'>
+        <div className='flex flex-col bg-[#dadada] dark:bg-[#090a0a] h-full'>
+            <div className='flex flex-col items-center mt-3 px-2'>
                 <GroupHeader group={group} />
-                <SidebarButton icon={SendHorizonal} label="Draft & Sent" onClick={() => ""} />
-                <SidebarButton icon={MessageSquareText} label="Threads" onClick={() => ""} />
+                {/* <SidebarButton icon={SendHorizonal} label="Draft & Sent" onClick={() => ""} />
+                <SidebarButton icon={MessageSquareText} label="Threads" onClick={() => ""} /> */}
             </div>
-            <div className='flex flex-col bg-[#f0f0f0] dark:bg-[#090a0a] h-full'>
-                <div>
-                    {group?.groupMembers?.map((item) => (
-                        // <UserItem key={item._id}
-                        //     user={item.user}
-                        //     label={item.user.name}
-                        //     id={item._id}
-                        // />
-                        <div key={item.id}>
-                            {item?.user}
-                        </div>
-                    ))}
-                </div>
+            <div>
+                {group?.groupMembers?.map((item) => (
+                    // <UserItem key={item._id}
+                    //     user={item.user}
+                    //     label={item.user.name}
+                    //     id={item._id}
+                    // />
+                    <div key={item.id}>
+                        {item?.user}
+                    </div>
+                ))}
             </div>
-            )
+        </div>
+    )
 }
 
-            export default GroupSidebar
+export default GroupSidebar
