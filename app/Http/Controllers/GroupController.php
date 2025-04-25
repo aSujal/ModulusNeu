@@ -33,17 +33,16 @@ class GroupController extends Controller
             $groupMember = $group->groupMembers()->where('user_id', $user->id)->first();
 
             // If the user is a member and the user is either the admin or owner
-            if ($groupMember && $groupMember->pivot->role === 'admin' || $groupMember->pivot->role === 'owner') {
-                
+            if ($groupMember && in_array($groupMember->pivot->role, ['admin', 'owner'])){
                 // Aber wir bekommen auch den Benutzer der die Anfrage sendet
-                $data['groupMembers'] = GroupMemberResource::collection(
+                $data["group"]['groupMembers'] = GroupMemberResource::collection(
                     $group->groupMembers()->get()
                 )->jsonSerialize();
                 
             }
 
             // Return the view with the prepared data
-            return Inertia::render('Groups/Edit', $data);
+            return Inertia::render('Groups/Index', $data);
     }
 
     public function updateGroup(int $id, CreateOrUpdateGroupRequest $request): RedirectResponse
