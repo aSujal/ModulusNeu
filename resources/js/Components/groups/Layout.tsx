@@ -1,10 +1,7 @@
-import {
-    ResizableHandle,
-    ResizablePanel,
-    ResizablePanelGroup,
-} from "@/components/ui/resizable"
+
 import { Group } from "@/types";
 import GroupSidebar from "./GroupSidebar";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "../ui/resizable";
 
 interface GroupLayoutProps {
     group: Group;
