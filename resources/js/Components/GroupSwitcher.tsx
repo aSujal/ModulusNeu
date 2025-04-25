@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     DropdownMenu,
     DropdownMenuTrigger,
@@ -6,7 +6,7 @@ import {
     DropdownMenuItem,
 } from "./ui/dropdown-menu";
 import { FolderOpen, Loader, Plus } from "lucide-react";
-import { router } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { Group } from "@/types";
 import CreateGroupModal from "./groups/CreateGroupModal";
 import { Button } from "./ui/button";
@@ -15,8 +15,26 @@ interface GroupSwitcherProps {
     groups: Group[];
 }
 const GroupSwitcher = ({ groups }: GroupSwitcherProps) => {
-    console.log(groups)
-    const [currentGroup, setCurrentGroup] = useState<Group>(groups[0]);
+    console.log(groups);
+    const {url}= usePage();
+    const [currentGroup, setCurrentGroup] = useState<Group | null>(null);
+    const idFromUrl = ():number  => {
+        const segments = url.split('/');
+        const extractedId = segments.pop();
+        if (extractedId && !isNaN(Number(extractedId))) {
+          return Number(extractedId);
+        }
+        return 0;
+      };
+    useEffect(() => {
+        if (idFromUrl()) {
+          const group = groups.find((group) => group.id === idFromUrl());
+          if (group) {
+            setCurrentGroup(group);
+          }
+        }
+      }, [idFromUrl, groups]);
+    // const [currentGroup, setCurrentGroup] = useState<Group>(groups[0]);
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
 
