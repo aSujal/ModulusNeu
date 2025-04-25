@@ -4,6 +4,10 @@ import { useState } from 'react';
 import { router } from '@inertiajs/react';
 import { Group, GroupMember } from '@/types';
 import GroupLayout from '@/Components/groups/Layout';
+import PostsList from '@/Components/posts/PostsList';
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { toast } from 'sonner';
 
 
 export default function Index({ group }: { group: Group; }) {
@@ -60,11 +64,29 @@ export default function Index({ group }: { group: Group; }) {
       console.error("Error deleting group:", error);
     }
   };
+  const handlePost = async () => {
+    try {
+      const data = {
+        title: "irgendwas",
+        status: "public",
+        description: "irgendwas",
+        publish_at: new Date()
+      }
+      await router.post(`/groups/${group.id}/post/create`, data)
+    } catch (error) {
+      toast.error("ha")
+    }
+  }
 
   return (
     <AuthenticatedLayout>
       <Head title={`Edit Group: ${groupName}`} />
-      <GroupLayout group={group}>hallo</GroupLayout>
+      <GroupLayout group={group}>
+        <div className='flex flex-col gap-4 w-full'>
+          <PostsList group={group} />
+          <Button onClick={handlePost} />
+        </div>
+      </GroupLayout>
     </AuthenticatedLayout>
   );
 }

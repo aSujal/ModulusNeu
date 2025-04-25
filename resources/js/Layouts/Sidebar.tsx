@@ -14,7 +14,7 @@ export default function Sidebar({ active = false, className = "", ...props }) {
     return (
         <aside
             id="logo-sidebar"
-            className="flex flex-col items-center gap-4 bg-[#0e0e12] pt-[9px] pb-4 w-[70px] h-full"
+            className="flex flex-col items-center gap-4 bg-[#0b0b0d] pt-[9px] pb-4 w-[70px] h-full"
             aria-label="Sidebar"
         >
             <GroupSwitcher groups={groups} />

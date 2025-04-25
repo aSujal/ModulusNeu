@@ -12,6 +12,7 @@ use App\Models\InvitationCode;
 use App\Models\Post;
 use App\Support\InvitationCodeGenerator;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
@@ -27,13 +28,13 @@ class GroupController extends Controller
         $user = Auth::user();
 
         $groupMember = $group->groupMembers()->where('user_id', $user->id)->first();
-        if ($groupMember && in_array($groupMember->pivot->role, ['admin', 'owner'])){
+        if ($groupMember && in_array($groupMember->pivot->role, ['admin', 'owner'])) {
             $data["group"]['groupMembers'] = GroupMemberResource::collection(
                 $group->groupMembers()->get()
             )->jsonSerialize();
         }
 
-        $data["group"]['posts'] =PostResource::collection($group->posts)->jsonSerialize();
+        $data["group"]['posts'] = PostResource::collection($group->posts)->jsonSerialize();
 
         return Inertia::render('Groups/Index', $data);
     }
@@ -41,17 +42,17 @@ class GroupController extends Controller
     public function updateGroup(int $id, CreateOrUpdateGroupRequest $request): RedirectResponse
     {
         // $groupMember = GroupMember::findOrFail(Auth::user()->id);
-        $groupMember =  GroupMember::where('user_id', Auth::user()->id)
-        ->where('group_id', $id)
-        ->firstOrFail();
+        $groupMember = GroupMember::where('user_id', Auth::user()->id)
+            ->where('group_id', $id)
+            ->firstOrFail();
         if ($groupMember->isAdminOrOwner()) {
             Group::findOrFail($id)->update([
                 'name' => $request->validated()['name'],
             ]);
-            return $this->backWith('success','Group Updated Successfully');
+            return $this->backWith('success', 'Group Updated Successfully');
         }
 
-        return $this->backWith('error','You are not Admin or Owner');
+        return $this->backWith('error', 'You are not Admin or Owner');
     }
 
     public function deleteGroup(int $id): RedirectResponse
@@ -61,10 +62,10 @@ class GroupController extends Controller
         if ($groupMember->isOwner()) {
             Group::destroy($id);
 
-            return $this->redirectWith('success','Group deleted Successfully', 'dashboard');
+            return $this->redirectWith('success', 'Group deleted Successfully', 'dashboard');
         }
 
-        return $this->redirectWith('error','You are not Owner', 'dashboard');
+        return $this->redirectWith('error', 'You are not Owner', 'dashboard');
     }
 
     public function createGroup(CreateOrUpdateGroupRequest $request): RedirectResponse
@@ -75,7 +76,7 @@ class GroupController extends Controller
 
         $group->groupMembers()->attach(Auth::id(), ['role' => 'owner']);
 
-        return $this->backWith('success','Group created successfully');
+        return $this->backWith('success', 'Group created successfully');
     }
 
     public function createInvitationCode(int $id): RedirectResponse
@@ -83,15 +84,15 @@ class GroupController extends Controller
         $groupMember = GroupMember::where('user_id', Auth::user()->id)->where('group_id', $id)->firstOrFail();
 
         if (!$groupMember->isAdminOrOwner()) {
-            return $this->backWith('error','You are not Admin or Owner');
+            return $this->backWith('error', 'You are not Admin or Owner');
         }
 
         $group = Group::with('invitationCode')->findOrFail($id);
-        if ($group->invitationCode->isNotEmpty()) {
+        if ($group->invitationCode && $group->invitationCode->expires_at > now()) {
             return $this->backWith(
                 'error',
                 'An Invitation Code already exists',
-                ['invitationCode' => $group->invitationCode->code]
+                ['code' => $group->invitationCode->code]
             );
         }
 
@@ -114,15 +115,15 @@ class GroupController extends Controller
         if ($invitationCode->expires_at < now()) {
             $invitationCode->delete();
 
-            return $this->backWith('success','Invitation Code is expired or invalid');
+            return $this->backWith('success', 'Invitation Code is expired or invalid');
         }
 
         if ($invitationCode->group->groupMembers()->whereUserId(Auth::id())->exists()) {
-            return $this->backWith('error','Group already joined');
+            return $this->backWith('error', 'Group already joined');
         }
 
         $invitationCode->group->groupMembers()->attach(Auth::id(), ['role' => 'user']);
 
-        return $this->backWith('error','Group joined successfully');
+        return $this->backWith('error', 'Group joined successfully');
     }
 }

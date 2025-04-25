@@ -1,10 +1,11 @@
 <?php
-
 namespace Database\Seeders;
 
 use App\Models\Group;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,9 +14,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::factory(1000)->create();
+        $specificUser = User::create([
+            'full_name' => 'Test User',
+            'email' => 'test@example.com',
+            'password' => bcrypt('password'),
+        ]);
 
-        foreach (range(1, 100) as $index) {
+        $users = User::factory(50)->create();
+
+        foreach (range(1, 10) as $index) {
             /**@var User $owner*/
             $owner = $users->random();
 
@@ -23,6 +30,15 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Group ' . $index,
                 'user_id' => $owner->id,
             ]);
+
+            foreach (range(1, 10) as $index) {
+                $group->posts()->create([
+                    'title' => "Post Title " . $index,
+                    'status' => "öffentlich",
+                    'description' => "This is a sample description for post " . $index,
+                    'publish_at' => Carbon::now()->addDays(rand(1, 50))
+                ]);
+            }
 
             $group->groupMembers()->attach(
                 $owner->id,
@@ -37,9 +53,21 @@ class DatabaseSeeder extends Seeder
                     $user->id,
                     ['role' => 'user']
                 );
+            }
 
+            foreach (range(1, rand(2, 5)) as $postIndex) {
+                $post = $group->posts()->create([
+                    'title' => 'Post ' . $postIndex . ' for ' . $group->name,
+                    'status' => 'public',
+                    'description' => 'This is a description for post ' . $postIndex . ' in ' . $group->name,
+                    'publish_at' => Carbon::now()->addDays(rand(1, 10)),
+                ]);
             }
         }
-
+        $group = Group::find(1);
+        $group->groupMembers()->attach(
+            $specificUser->id,
+            ['role' => 'owner']
+        );
     }
 }

@@ -11,13 +11,25 @@ export interface Group {
     name: string;
     image?: string | null;
     groupMembers: GroupMember[];
-
+    posts: Post[]
 };
 
 export interface GroupMember {
     id: number;
     role: string;
     user: string;
+}
+
+export interface Post {
+    id: number;
+    title: string,
+    status: string,
+    updated_at: Date,
+    created_at: Date,
+    publish_at: Date,
+    type: string,
+    group_id: number,
+    description: string,
 }
 
 export type PageProps<

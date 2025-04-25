@@ -24,8 +24,8 @@ const Toolbar = () => {
 
     return (
         <>
-            <JoinGroupModal open={open} onClose={() => setOpen(false)}/>
-            <nav className='flex justify-between items-center bg-[#0e0e12] p-1.5'>
+            <JoinGroupModal open={open} onClose={() => setOpen(false)} />
+            <nav className='flex justify-between items-center bg-[#0b0b0d] p-1.5'>
                 <div className='flex-1'>
                     <div>
                         <a
@@ -49,7 +49,7 @@ const Toolbar = () => {
                 </div>
                 <div className='flex flex-1 justify-end items-center ml-auto'>
                     <Button variant="secondary" className='text-white' onClick={() => setOpen(true)}>
-                        <BookPlus className='size-5'  />
+                        <BookPlus className='size-5' />
                     </Button>
                 </div>
             </nav>
