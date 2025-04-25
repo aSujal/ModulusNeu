@@ -18,24 +18,20 @@ class GroupController extends Controller
 {
     public function showUserGroup(int $id): InertiaResponse
     {
-            $group = Group::findOrFail($id);
-            $data = [
-                'group' => GroupResource::make($group)->jsonSerialize(),
-            ];
-            $user = Auth::user();
+        $group = Group::findOrFail($id);
+        $data = [
+            'group' => GroupResource::make($group)->jsonSerialize(),
+        ];
+        $user = Auth::user();
 
-            $groupMember = $group->groupMembers()->where('user_id', $user->id)->first();
-            if ($groupMember && $groupMember->pivot->role === 'admin' || $groupMember->pivot->role === 'owner') {
-                $data['groupMembers'] = GroupMemberResource::collection(
+        $groupMember = $group->groupMembers()->where('user_id', $user->id)->first();
+        if ($groupMember && in_array($groupMember->pivot->role, ['admin', 'owner'])){
+            $data["group"]['groupMembers'] = GroupMemberResource::collection(
+                $group->groupMembers()->get()
+            )->jsonSerialize();
+        }
 
-            if ($groupMember && in_array($groupMember->pivot->role, ['admin', 'owner'])){
-                $data["group"]['groupMembers'] = GroupMemberResource::collection(
-                    $group->groupMembers()->get()
-                )->jsonSerialize();
-
-            }
-
-            return Inertia::render('Groups/Index', $data);
+        return Inertia::render('Groups/Index', $data);
     }
 
     public function updateGroup(int $id, CreateOrUpdateGroupRequest $request): RedirectResponse
