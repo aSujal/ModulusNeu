@@ -41,8 +41,11 @@ class HandleInertiaRequests extends Middleware
         ];
 
         if (Auth::check()) {
-            $user = User::with('ownedGroups.groupMembers')->findOrFail($request->user()->id);
-            $data['groups'] = GroupResource::collection($user->ownedGroups)->jsonSerialize();
+            $user = User::with('ownedGroups.groupMembers', 'groups.groupMembers')->findOrFail($request->user()->id);
+            $ownedGroups = GroupResource::collection($user->ownedGroups)->jsonSerialize();
+            $memberGroups = GroupResource::collection($user->groups)->jsonSerialize();
+
+            $data['groups'] = array_merge($ownedGroups, $memberGroups);
         }
 
         return $data;
