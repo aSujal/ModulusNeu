@@ -13,8 +13,8 @@ class GroupMemberResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            'role' => $this->role ?? $this->pivot->role,
-            'user' => $this->user ?? $this->full_name
+            'role' => $this->pivot->role,
+            'user' => $this->full_name
         ];
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -32,7 +33,7 @@ class User extends Authenticatable
     }
 
     // User can own many groups
-    public function ownedGroups()
+    public function ownedGroups(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Group::class);
     }
@@ -49,6 +50,13 @@ class User extends Authenticatable
     {
         return $this->id === $group->user_id;
     }
-    
+
+    public function isAdminOrOwner(int $groupId): bool
+    {
+        $groupMember = GroupMember::where('user_id', $this->id)
+            ->where('group_id', $groupId)
+            ->firstOrFail();
+    }
+
 }
 

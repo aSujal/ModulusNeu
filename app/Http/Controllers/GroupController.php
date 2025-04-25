@@ -18,31 +18,20 @@ class GroupController extends Controller
 {
     public function showUserGroup(int $id): InertiaResponse
     {
-            // Fetch the group by ID
             $group = Group::findOrFail($id);
-
-            // Prepare the data to be passed to the view
             $data = [
                 'group' => GroupResource::make($group)->jsonSerialize(),
             ];
-
-            // Check if the authenticated user is a member of the group and is an owner/admin
             $user = Auth::user();
-            
-            // Find the user's group membership
-            $groupMember = $group->groupMembers()->where('user_id', $user->id)->first();
 
-            // If the user is a member and the user is either the admin or owner
+            $groupMember = $group->groupMembers()->where('user_id', $user->id)->first();
             if ($groupMember && $groupMember->pivot->role === 'admin' || $groupMember->pivot->role === 'owner') {
-                
-                // Aber wir bekommen auch den Benutzer der die Anfrage sendet
                 $data['groupMembers'] = GroupMemberResource::collection(
                     $group->groupMembers()->get()
                 )->jsonSerialize();
-                
+
             }
 
-            // Return the view with the prepared data
             return Inertia::render('Groups/Edit', $data);
     }
 
