@@ -39,7 +39,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/groups/{id}/invitation/create', [GroupController::class, 'createInvitationCode'])->name('create.group.invitation-code');
     Route::post('/groups/invitation/{code}/join', [GroupController::class, 'joinGroup'])->name('create.joinGroup');
 
-    Route::get('/groups/{groupId}/posts/{postId}', [PostController::class, 'show'])->name('post.show-index-page');
     Route::post('/groups/{groupId}/post/create', [PostController::class, 'create'])->name('post.create.post');
     Route::put('/post/{id}/update', [PostController::class, 'update'])->name('post.update.post');
     Route::delete('/post/{id}/delete', [PostController::class, 'destroy'])->name('post.delete.post');

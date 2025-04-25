@@ -14,13 +14,6 @@ use \Inertia\Response as InertiaResponse;
 
 class PostController extends Controller
 {
-    public function show(int $postId): InertiaResponse
-    {
-        return Inertia::render('Post/Show', [
-            'post' =>  PostResource::make(Post::find($postId))->jsonSerialize(),
-        ]);
-    }
-
     public function create(int $groupId, CreateOrUpdatePostRequest $request): RedirectResponse
     {
         $validated = $request->validated();

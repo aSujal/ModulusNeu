@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateOrUpdateGroupRequest;
 use App\Http\Resources\GroupMemberResource;
 use App\Http\Resources\GroupResource;
+use App\Http\Resources\PostResource;
 use App\Models\Group;
 use App\Models\GroupMember;
 use App\Models\InvitationCode;
+use App\Models\Post;
 use App\Support\InvitationCodeGenerator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +20,7 @@ class GroupController extends Controller
 {
     public function showUserGroup(int $id): InertiaResponse
     {
-        $group = Group::findOrFail($id);
+        $group = Group::with('posts')->findOrFail($id);
         $data = [
             'group' => GroupResource::make($group)->jsonSerialize(),
         ];
@@ -30,6 +32,8 @@ class GroupController extends Controller
                 $group->groupMembers()->get()
             )->jsonSerialize();
         }
+
+        $data["group"]['posts'] =PostResource::collection($group->posts)->jsonSerialize();
 
         return Inertia::render('Groups/Index', $data);
     }
