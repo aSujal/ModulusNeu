@@ -14,7 +14,7 @@ export default function Authenticated({
     return (
         <div className='h-full'>
             <Toolbar />
-            <div className="flex bg-background h-[calc(100vh-64px)]">
+            <div className="flex bg-background h-[calc(100vh-48px)]">
                 <Sidebar />
                 <main className='w-full'>{children}</main>
             </div>

@@ -22,7 +22,7 @@ const GroupHeader = ({ group }: GroupHeaderProps) => {
             <div className='flex justify-between items-center gap-0.5 px-4 h-[49px]'>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant={"ghost"} className='p-1.5 w-auto overflow-hidden font-semibold text-lg'>
+                        <Button variant={"ghost"} className='hover:bg-muted/20 p-1.5 w-auto overflow-hidden font-semibold text-lg'>
                             <span className='truncate'>{group.name}</span>
                             <ChevronDown className='ml-1 size-4 shrink-0' />
                         </Button>

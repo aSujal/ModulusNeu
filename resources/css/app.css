@@ -12,7 +12,7 @@
         --popover-foreground: 222.2 84% 4.9%;
         --primary: 142 77% 73%;
         --primary-foreground: 210 40% 98%;
-        --secondary: 210 40% 96.1%;
+        --secondary: 142 46% 68%;
         --secondary-foreground: 222.2 47.4% 11.2%;
         --muted: 210 40% 96.1%;
         --muted-foreground: 215.4 16.3% 46.9%;
@@ -33,17 +33,17 @@
 
     .dark {
         --test: hsl(142, 77%, 73%);
-        /*background #070709*/
-        --background: 240 13% 3%;
+        /*background #080b09*/
+        --background: 140 16% 4%;
         --foreground: 210 40% 98%;
-        --card: 222.2 84% 4.9%;
+        --card: 240 20% 5%;
         --card-foreground: 210 40% 98%;
         --popover: 222.2 84% 4.9%;
         --popover-foreground: 210 40% 98%;
         /*primary #86efac*/
-        --primary: 142 77% 73%;
+        --primary: 142 77% 27%;
         --primary-foreground: 222.2 47.4% 11.2%;
-        --secondary: 217.2 32.6% 17.5%;
+        --secondary: 142 46% 32%;
         --secondary-foreground: 210 40% 98%;
         /*muted #101014*/
         --muted: 240 12% 13%;
@@ -71,4 +71,9 @@
     body {
         @apply bg-background text-foreground;
     }
+}
+
+.posts-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #b9b9b9 #3a3a3a;
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { BookPlus, Info, Search } from 'lucide-react'
+import { BookPlus, Info, PlusIcon, Search } from 'lucide-react'
 import { Button } from '@/Components/ui/button';
 import { usePage } from '@inertiajs/react';
 import { Group } from '@/types';
@@ -25,16 +25,14 @@ const Toolbar = () => {
     return (
         <>
             <JoinGroupModal open={open} onClose={() => setOpen(false)} />
-            <nav className='flex justify-between items-center bg-[#0b0b0d] p-1.5'>
-                <div className='flex-1'>
-                    <div>
-                        <a
-                            href={route("dashboard")}
-                            className="flex items-center mb-5 ps-2.5"
-                        >
-                            <i className="mr-2 text-primary text-2xl fa-solid fa-graduation-cap"></i>
-                        </a>
-                    </div>
+            <nav className='flex justify-between items-center bg-primary/80 p-1.5'>
+                <div className='flex flex-1 items-center'>
+                    <a
+                        href={route("dashboard")}
+                        className="flex items-center"
+                    >
+                        <i className="mr-2 text-2xl fa-solid fa-graduation-cap"></i>
+                    </a>
                 </div>
                 <div className='min-w-[280px] max-[642px] grow-[2] shrink'>
                     <Button size={"sm"} className='justify-start bg-accent/25 hover:bg-accent/25 px-2 w-full h-7 text-white' >
@@ -48,8 +46,8 @@ const Toolbar = () => {
                     </Button>
                 </div>
                 <div className='flex flex-1 justify-end items-center ml-auto'>
-                    <Button variant="secondary" className='text-white' onClick={() => setOpen(true)}>
-                        <BookPlus className='size-5' />
+                    <Button variant="secondary" className='bg-muted/90 hover:bg-muted/60 text-white' onClick={() => setOpen(true)}>
+                        <PlusIcon className='size-5' />
                     </Button>
                 </div>
             </nav>

@@ -2,6 +2,7 @@ import { AlertTriangle, HashIcon, Loader, MessageSquareText, SendHorizonal } fro
 import { Group } from '@/types';
 import SidebarButton from '../layout/SidebarItem';
 import GroupHeader from './GroupHeader';
+import { UserItem } from '../UserItem';
 
 interface GroupSidebar {
     group: Group;
@@ -26,22 +27,16 @@ const GroupSidebar = ({ group }: GroupSidebar) => {
     }
 
     return (
-        <div className='flex flex-col bg-[#dadada] dark:bg-[#090a0a] h-full'>
-            <div className='flex flex-col items-center mt-3 px-2'>
+        <div className='flex flex-col bg-secondary h-full'>
+            <div className='flex flex-col items-center'>
                 <GroupHeader group={group} />
-                {/* <SidebarButton icon={SendHorizonal} label="Draft & Sent" onClick={() => ""} />
-                <SidebarButton icon={MessageSquareText} label="Threads" onClick={() => ""} /> */}
             </div>
             <div>
                 {group?.groupMembers?.map((item) => (
-                    // <UserItem key={item._id}
-                    //     user={item.user}
-                    //     label={item.user.name}
-                    //     id={item._id}
-                    // />
-                    <div key={item.id}>
-                        {item?.user}
-                    </div>
+                    <UserItem key={item.id}
+                        label={item.user}
+                        id={item.id}
+                    />
                 ))}
             </div>
         </div>
