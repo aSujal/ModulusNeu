@@ -16,8 +16,8 @@ class CreateOrUpdateTaskRequest extends FormRequest
     {
         $group = Group::find($this->route('groupId'));
         // Auth::user()->can('create', $group);
-        dd($this->user()->can('create-post', $group));
-        return $group && $this->user()->can('create-post', $group);
+        // dd($this->user()->can('create', [Task::class,$group]));
+        return $group && $this->user()->can('create', [Task::class,$group]);
     }
 
     /**

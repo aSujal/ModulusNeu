@@ -4,6 +4,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupMemberController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,6 +38,13 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/groups/{id}/invitation/create', [GroupController::class, 'createInvitationCode'])->name('create.group.invitation-code');
     Route::post('/groups/invitation/{code}/join', [GroupController::class, 'joinGroup'])->name('create.joinGroup');
+
+    Route::get('/groups/{groupId}/task/create', [TaskController::class, 'create'])->name('create.group.create-task');
+    Route::post('/groups/{groupId}/task/create', [TaskController::class, 'store'])->name('create.group.store-task');
+    // Route::get('/groups/{groupId}/task/{taskId}/edit', [TaskController::class, 'edit'])->name('create.group.edit-task');
+    Route::put('/groups/{groupId}/task/{taskId}/update', [TaskController::class, 'update'])->name('create.group.update-task');
+    // Route::delete('/groups/{groupId}/task/{taskId}/delete', [TaskController::class, 'destroy'])->name('create.group.delete-task');
+
 
     Route::post('/groups/{groupId}/post/create', [PostController::class, 'create'])->name('post.create.post');
     Route::put('/post/{id}/update', [PostController::class, 'update'])->name('post.update.post');
