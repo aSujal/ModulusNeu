@@ -6,7 +6,7 @@ import { Input } from '@/Components/ui/input';
 import { Button } from '@/Components/ui/button';
 import { toast } from 'sonner';
 
-export default function Index() {
+export default function Create() {
     const [formValues, setFormValues] = useState({
         title: '',
         file: null,
