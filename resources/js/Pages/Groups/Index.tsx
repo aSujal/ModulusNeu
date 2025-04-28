@@ -80,10 +80,12 @@ export default function Index({ group }: { group: Group; }) {
 
   return (
     <AuthenticatedLayout>
-      <Head title={`Edit Group: ${groupName}`} />
+      <Head title={`Group: ${groupName}`} />
       <GroupLayout group={group}>
-        <div className='flex flex-col gap-4 w-full'>
-          <PostsList group={group} />
+        <div className='flex flex-col gap-3 px-3 py-2'>
+          <div className='flex flex-col gap-3 w-full h-[calc(100vh-130px)] overflow-y-auto posts-scrollbar'>
+            <PostsList group={group} />
+          </div>
           <Button onClick={handlePost} />
         </div>
       </GroupLayout>

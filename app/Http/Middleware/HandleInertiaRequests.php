@@ -44,8 +44,11 @@ class HandleInertiaRequests extends Middleware
             $user = User::with('ownedGroups.groupMembers', 'groups.groupMembers')->findOrFail($request->user()->id);
             $ownedGroups = GroupResource::collection($user->ownedGroups)->jsonSerialize();
             $memberGroups = GroupResource::collection($user->groups)->jsonSerialize();
-
-            $data['groups'] = array_merge($ownedGroups, $memberGroups);
+            $allGroups = collect([...$ownedGroups, ...$memberGroups])
+                ->unique('id') // removes duplicates by 'id'
+                ->values()     // reindex
+                ->all();
+            $data['groups'] = $allGroups;
         }
 
         return $data;

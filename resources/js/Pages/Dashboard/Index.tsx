@@ -1,6 +1,6 @@
 import React from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import { Group } from "@/types";
 
 const Index = ({ groups }: { groups: Group[] }) => {
@@ -8,37 +8,14 @@ const Index = ({ groups }: { groups: Group[] }) => {
     return (
         <AuthenticatedLayout>
             <Head title="Dashboard" />
-            {/* <GroupSwitcher groups={groups} /> */}
-            <div className="py-8">
-                <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-                    <h2 className="mb-6 font-semibold text-foreground text-2xl">
-                        Your Groups
-                    </h2>
-
-                    <div className="gap-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                        {groups?.map((group) => (
-                            <div
-                                key={group.id}
-                                className="bg-card shadow-sm hover:shadow-md rounded-2xl overflow-hidden transition"
-                            >
-                                <div className="flex justify-center items-center bg-muted h-40">
-                                    <img
-                                        src={
-                                            group.image ??
-                                            "https://via.placeholder.com/150"
-                                        }
-                                        alt={group.name}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                                <div className="p-4 text-center">
-                                    <h3 className="font-medium text-foreground text-lg">
-                                        {group.name}
-                                    </h3>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+            <div className="px-3 py-3">
+                <h1 className="font-bold text-2xl">Dashboard</h1>
+                <div className="gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-4">
+                    {groups.map((group) => (
+                        <div key={group.id} className="bg-secondary/60 hover:bg-secondary/30 shadow-md p-4 rounded-lg transition-colors cursor-pointer" onClick={() => router.visit(`/groups/${group.id}`)}>
+                            <h2 className="font-semibold text-xl">{group.name}</h2>
+                        </div>
+                    ))}
                 </div>
             </div>
         </AuthenticatedLayout>
