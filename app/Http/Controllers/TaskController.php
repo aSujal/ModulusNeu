@@ -12,6 +12,13 @@ use Inertia\Inertia;
 
 class TaskController extends Controller
 {
+    public function index(int $taskId)
+    {
+        $task = Task::findOrFail($taskId);
+        return Inertia::render('Task/Index', [
+            'task' => $task,
+        ]);
+    }
     public function create(){
         return Inertia::render('Task/Create');
     }

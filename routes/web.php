@@ -39,11 +39,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/groups/{id}/invitation/create', [GroupController::class, 'createInvitationCode'])->name('create.group.invitation-code');
     Route::post('/groups/invitation/{code}/join', [GroupController::class, 'joinGroup'])->name('create.joinGroup');
 
-    Route::get('/groups/{groupId}/task/create', [TaskController::class, 'create'])->name('create.group.create-task');
-    Route::post('/groups/{groupId}/task/create', [TaskController::class, 'store'])->name('create.group.store-task');
+    Route::get('/groups/{groupId}/task/create', [TaskController::class, 'create'])->name('group.create-task');
+    Route::post('/groups/{groupId}/task/create', [TaskController::class, 'store'])->name('group.store-task');
     // Route::get('/groups/{groupId}/task/{taskId}/edit', [TaskController::class, 'edit'])->name('create.group.edit-task');
-    Route::put('/groups/{groupId}/task/{taskId}/update', [TaskController::class, 'update'])->name('create.group.update-task');
+    Route::put('/groups/{groupId}/task/{taskId}/update', [TaskController::class, 'update'])->name('group.update-task');
     // Route::delete('/groups/{groupId}/task/{taskId}/delete', [TaskController::class, 'destroy'])->name('create.group.delete-task');
+    Route::get('/task/{taskId}', [TaskController::class, 'index'])->name('group.task');
 
 
     Route::post('/groups/{groupId}/post/create', [PostController::class, 'create'])->name('post.create.post');
