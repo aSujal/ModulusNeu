@@ -4,6 +4,7 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupMemberController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskAnswerController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -46,6 +47,13 @@ Route::middleware('auth')->group(function () {
     // Route::delete('/groups/{groupId}/task/{taskId}/delete', [TaskController::class, 'destroy'])->name('create.group.delete-task');
     Route::get('/task/{taskId}', [TaskController::class, 'index'])->name('group.task');
 
+    // Route::get('/task/{taskId}/answers', [TaskAnswerController::class, 'index'])->name('task.answers');
+    Route::get('/task/{taskId}/answers/create', [TaskAnswerController::class, 'create'])->name('task.create-answer');
+    Route::post('/task/{taskId}/answers/create', [TaskAnswerController::class, 'store'])->name('task.store-answer');
+    // Route::get('/task/{taskId}/answers/{answerId}/edit', [TaskAnswerController::class, 'edit'])->name('task.edit-answer');
+    // Route::put('/task-answers/update/{taskId}/{answerId}', [TaskAnswerController::class, 'update'])->name('task_answers.update');
+    // Route::delete('/task-answers/delete/{taskId}/{answerId}', [TaskAnswerController::class, 'destroy'])->name('task_answers.delete');
+    
 
     Route::post('/groups/{groupId}/post/create', [PostController::class, 'create'])->name('post.create.post');
     Route::put('/post/{id}/update', [PostController::class, 'update'])->name('post.update.post');
