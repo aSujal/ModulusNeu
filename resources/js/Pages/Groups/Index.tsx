@@ -3,10 +3,10 @@ import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import { router } from '@inertiajs/react';
 import { Group, GroupMember } from '@/types';
-import GroupLayout from '@/Components/groups/Layout';
-import PostsList from '@/Components/posts/PostsList';
-import { Input } from '@/Components/ui/input';
-import { Button } from '@/Components/ui/button';
+import GroupLayout from '@/components/groups/Layout';
+import PostsList from '@/components/posts/PostsList';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
 

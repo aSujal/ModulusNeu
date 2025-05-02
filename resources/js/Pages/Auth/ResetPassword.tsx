@@ -1,7 +1,7 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import InputError from '@/components/InputError';
+import InputLabel from '@/components/InputLabel';
+import PrimaryButton from '@/components/PrimaryButton';
+import TextInput from '@/components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
@@ -41,7 +41,7 @@ export default function ResetPassword({
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        className="block mt-1 w-full"
                         autoComplete="username"
                         onChange={(e) => setData('email', e.target.value)}
                     />
@@ -57,7 +57,7 @@ export default function ResetPassword({
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="block mt-1 w-full"
                         autoComplete="new-password"
                         isFocused={true}
                         onChange={(e) => setData('password', e.target.value)}
@@ -76,7 +76,7 @@ export default function ResetPassword({
                         type="password"
                         name="password_confirmation"
                         value={data.password_confirmation}
-                        className="mt-1 block w-full"
+                        className="block mt-1 w-full"
                         autoComplete="new-password"
                         onChange={(e) =>
                             setData('password_confirmation', e.target.value)
@@ -89,7 +89,7 @@ export default function ResetPassword({
                     />
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
+                <div className="flex justify-end items-center mt-4">
                     <PrimaryButton className="ms-4" disabled={processing}>
                         Reset Password
                     </PrimaryButton>

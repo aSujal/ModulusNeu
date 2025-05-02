@@ -1,38 +1,77 @@
-import { Home, LogOut } from "lucide-react";
+import { Home, LogOut, Plus, Search, Users } from "lucide-react";
 import { usePage } from "@inertiajs/react";
-import GroupSwitcher from "@/Components/GroupSwitcher";
-import SidebarButton from "@/Components/layout/SidebarItem";
+import SidebarButton from "@/components/layout/SidebarItem";
 import { Group } from "@/types";
 import { router } from "@inertiajs/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenuButton, SidebarMenuItem, SidebarTrigger } from "@/components/ui/sidebar";
+import { Input } from "@/components/ui/input";
+import CreateGroupModal from "@/components/groups/CreateGroupModal";
+import { Button } from "@/components/ui/button";
+import { UserNav } from "@/components/user/user-nav";
 
-export default function Sidebar({ active = false, className = "", ...props }) {
-    const user = usePage().props.auth.user;
+export default function AppSidebar({ active = false, className = "", ...props }) {
     const groups = usePage().props.groups as Group[] || [];
+    const user = usePage().props.auth.user;
+    const { url } = usePage();
+    const [searchQuery, setSearchQuery] = useState("")
+    const [showModal, setShowModal] = useState(false);
+
+    const filteredGroups = groups.filter((group) => group.name.toLowerCase().includes(searchQuery.toLowerCase()))
+
     console.log(groups)
-
     return (
-        <aside
-            id="logo-sidebar"
-            className="flex flex-col items-center gap-4 bg-primary/80 pt-[9px] pb-4 w-[70px] h-full"
-            aria-label="Sidebar"
-        >
-            <GroupSwitcher groups={groups} />
-            <div className="flex flex-col gap-3 mt-auto w-full">
-                <SidebarButton
-                    className="bg-slate-200 dark:bg-slate-700 text-black dark:text-white"
-                    onClick={() => router.visit(route("profile.edit"))}
-                    isActive={route().current("profile.edit")}
-                >
-                    {user?.full_name?.charAt(0)}
-                </SidebarButton>
-
-                <SidebarButton
-                    icon={LogOut}
-                    onClick={() => router.post(route("logout"))}
-                    isActive={false}
-                />
-            </div>
-        </aside>
+        <Sidebar>
+            <SidebarHeader className="px-3 py-2 border-b">
+                <div className="flex items-center gap-2">
+                    <div className="relative w-8 h-8">
+                        <div className="absolute inset-0 flex justify-center items-center bg-primary rounded-md font-bold text-primary-foreground text-lg">
+                            G
+                        </div>
+                    </div>
+                    <span className="font-bold text-xl">GroupHub</span>
+                </div>
+                <div className="flex items-center gap-2 mt-2">
+                    <div className="relative flex-1">
+                        <Search className="top-2.5 left-2 absolute w-4 h-4 text-muted-foreground" />
+                        <Input
+                            placeholder="Search groups..."
+                            className="pl-8"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+                </div>
+            </SidebarHeader>
+            <SidebarContent className="px-2 py-2">
+                <SidebarMenuButton isActive={url === "/"} >
+                    <a className="flex items-center gap-2 w-full" href="/dashboard">
+                        <Users className="w-4 h-4" />
+                        <span>All Groups</span>
+                    </a>
+                </SidebarMenuButton>
+                {filteredGroups.map((group) => (
+                    <SidebarMenuButton key={group.id} asChild isActive={url === `/groups/${group.id}`}>
+                        <a href={`/groups/${group.id}`} className="flex items-center gap-2 w-full truncate">
+                            <div className="flex justify-center items-center bg-primary/10 rounded-sm w-4 h-4 font-medium text-primary text-xs">
+                                {group.name.charAt(0)}
+                            </div>
+                            <span>{group.name}</span>
+                        </a>
+                    </SidebarMenuButton>
+                ))}
+            </SidebarContent>
+            <SidebarFooter className="p-2 border-t">
+                <div className="gap-2 grid">
+                    <CreateGroupModal open={showModal} onClose={() => setShowModal(false)} />
+                    <Button variant="outline" className="justify-start w-full" onClick={() => setShowModal(true)}>
+                        <Plus className="mr-2 w-4 h-4" />
+                        Create New Group
+                    </Button>
+                    <UserNav />
+                </div>
+            </SidebarFooter>
+            <SidebarTrigger className="top-3 right-0 absolute translate-x-1/2" />
+        </Sidebar>
     );
 }

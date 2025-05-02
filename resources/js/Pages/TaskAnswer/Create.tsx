@@ -2,8 +2,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import { router } from '@inertiajs/react';
-import { Input } from '@/Components/ui/input';
-import { Button } from '@/Components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
 export default function CreateTaskAnswer() {
@@ -53,10 +53,10 @@ export default function CreateTaskAnswer() {
         <AuthenticatedLayout>
             <Head title="Create Task Answer" />
 
-            <div className="container mx-auto p-4">
+            <div className="mx-auto p-4 container">
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label htmlFor="name" className="block text-sm font-medium">
+                        <label htmlFor="name" className="block font-medium text-sm">
                             Name
                         </label>
                         <Input
@@ -71,7 +71,7 @@ export default function CreateTaskAnswer() {
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="file" className="block text-sm font-medium">
+                        <label htmlFor="file" className="block font-medium text-sm">
                             File
                         </label>
                         <Input
@@ -83,7 +83,7 @@ export default function CreateTaskAnswer() {
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="text" className="block text-sm font-medium">
+                        <label htmlFor="text" className="block font-medium text-sm">
                             Text
                         </label>
                         <textarea
@@ -92,13 +92,13 @@ export default function CreateTaskAnswer() {
                             value={formValues.text}
                             onChange={handleChange}
                             placeholder="Enter text"
-                            className="w-full border rounded px-3 py-2"
+                            className="px-3 py-2 border rounded w-full"
                             required
                         />
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="task_id" className="block text-sm font-medium">
+                        <label htmlFor="task_id" className="block font-medium text-sm">
                             Task ID
                         </label>
                         <Input

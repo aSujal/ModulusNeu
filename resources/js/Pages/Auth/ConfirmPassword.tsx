@@ -1,7 +1,7 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
+import InputError from '@/components/InputError';
+import InputLabel from '@/components/InputLabel';
+import PrimaryButton from '@/components/PrimaryButton';
+import TextInput from '@/components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
@@ -23,7 +23,7 @@ export default function ConfirmPassword() {
         <GuestLayout>
             <Head title="Confirm Password" />
 
-            <div className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+            <div className="mb-4 text-gray-600 dark:text-gray-400 text-sm">
                 This is a secure area of the application. Please confirm your
                 password before continuing.
             </div>
@@ -37,7 +37,7 @@ export default function ConfirmPassword() {
                         type="password"
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
+                        className="block mt-1 w-full"
                         isFocused={true}
                         onChange={(e) => setData('password', e.target.value)}
                     />
@@ -45,7 +45,7 @@ export default function ConfirmPassword() {
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
+                <div className="flex justify-end items-center mt-4">
                     <PrimaryButton className="ms-4" disabled={processing}>
                         Confirm
                     </PrimaryButton>

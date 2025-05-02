@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { BookPlus, Info, PlusIcon, Search } from 'lucide-react'
-import { Button } from '@/Components/ui/button';
+import { Button } from '@/components/ui/button';
 import { usePage } from '@inertiajs/react';
 import { Group } from '@/types';
-import JoinGroupModal from '@/Components/groups/JoinGroupModal';
+import JoinGroupModal from '@/components/groups/JoinGroupModal';
 
 
 const Toolbar = () => {

@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { Button } from '@/Components/ui/button';
+import { Button } from '@/components/ui/button';
 
 interface TaskProps {
     task: {
@@ -20,8 +20,8 @@ export default function Index({ task }: TaskProps, file1: string) {
         <AuthenticatedLayout>
             <Head title={`Task - ${task.title}`} />
 
-            <div className="container mx-auto p-4">
-                <h1 className="text-2xl font-bold mb-4">Task Details</h1>
+            <div className="mx-auto p-4 container">
+                <h1 className="mb-4 font-bold text-2xl">Task Details</h1>
 
                 <div className="mb-4">
                     <strong>Title:</strong> {task.title}
@@ -60,7 +60,7 @@ export default function Index({ task }: TaskProps, file1: string) {
                     <strong>Updated At:</strong> {new Date(task.updated_at).toLocaleString()}
                 </div>
 
-               
+
             </div>
         </AuthenticatedLayout>
     );

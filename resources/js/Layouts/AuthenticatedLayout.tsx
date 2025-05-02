@@ -1,7 +1,8 @@
 import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
-import Sidebar from './Sidebar';
+import AppSidebar from './Sidebar';
 import Toolbar from './Toolbar';
+import { SidebarProvider } from '@/components/ui/sidebar';
 
 export default function Authenticated({
     children,
@@ -12,12 +13,11 @@ export default function Authenticated({
         useState(false);
 
     return (
-        <div className='h-full'>
-            <Toolbar />
-            <div className="flex bg-background h-[calc(100vh-48px)]">
-                <Sidebar />
-                <main className='w-full'>{children}</main>
+        <SidebarProvider>
+            <div className="flex bg-background min-h-screen">
+                <AppSidebar />
+                <main className='flex-1'>{children}</main>
             </div>
-        </div>
+        </SidebarProvider>
     );
 }
