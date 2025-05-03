@@ -7,11 +7,12 @@ import PostsList from '@/components/posts/PostsList';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import InviteModal from '@/components/groups/InviteModal';
-import { FileText, Users } from 'lucide-react';
+import { FileText, PlusCircle, Users } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { UserItem } from '@/components/UserItem';
 import { GroupMembers } from '@/components/groups/GroupMembers';
 import { CreatePostDialog } from '@/components/posts/CreatePost';
+import { CreateTaskDialog } from '@/components/tasks/CreateTask';
 
 export default function Index({ group }: { group: Group; }) {
   const [groupName, setGroupName] = useState(group.name);
@@ -121,6 +122,12 @@ export default function Index({ group }: { group: Group; }) {
                   New Post
                 </Button>
               </CreatePostDialog>
+              <CreateTaskDialog groupId={group.id}>
+                <Button size="sm">
+                  <PlusCircle className="mr-2 w-4 h-4" />
+                  New Task
+                </Button>
+              </CreateTaskDialog>
             </div>
           </div>
           <TabsContent value="posts" className="mt-4">
