@@ -38,10 +38,10 @@ const Index = ({ groups }: { groups: Group[] }) => {
                         <div className="flex items-center gap-2">
                             <div className="relative w-8 h-8">
                                 <div className="absolute inset-0 flex justify-center items-center bg-primary rounded-md font-bold text-primary-foreground text-lg">
-                                    G
+                                    <i className="fa-solid fa-graduation-cap"></i>
                                 </div>
                             </div>
-                            <h1 className="font-bold text-xl">GroupHub</h1>
+                            <span className="font-bold text-xl">Modulus</span>
                         </div>
                     </div>
                 </header>

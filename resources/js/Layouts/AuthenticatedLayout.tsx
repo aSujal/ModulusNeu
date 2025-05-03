@@ -14,7 +14,7 @@ export default function Authenticated({
 
     return (
         <SidebarProvider>
-            <div className="flex bg-background min-h-screen">
+            <div className="flex bg-background w-full min-h-screen">
                 <AppSidebar />
                 <main className='flex-1'>{children}</main>
             </div>

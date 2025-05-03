@@ -89,6 +89,52 @@
     }
 }
 
+.ql-toolbar {
+    border: none !important;
+    background-color: #0A0A0A !important;
+}
+
+.ql-toolbar .ql-formats:not(:last-child) {
+    border-right: 1px solid hsl(var(--border)) !important;
+}
+
+.ql-container {
+    font-family: "Lato", sans-serif !important;
+    border: none !important;
+    height: unset !important;
+}
+
+.ql-editor {
+    line-height: 22px !important;
+    padding: 8px 12px !important;
+    color: hsl(var(--foreground)) !important;
+    font-weight: 400 !important;
+    font-family: "Lato", sans-serif !important;
+    font-size: 14px !important;
+}
+
+.ql-editor a {
+    color: #1264a3 !important;
+}
+
+.ql-editor a:hover {
+    text-decoration: underline !important;
+}
+
+.ql-renderer {
+    padding: 0 !important;
+}
+
+.ql-editor::before {
+    left: 12px !important;
+    font-family: "Lato", sans-serif !important;
+    color: hsl(var(--muted-foreground)) !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    @apply truncate;
+}
+
+
 .posts-scrollbar {
     scrollbar-width: thin;
     scrollbar-color: #b9b9b9 #3a3a3a;

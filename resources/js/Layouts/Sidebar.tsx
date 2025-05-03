@@ -1,14 +1,13 @@
 import { Home, LogOut, Plus, Search, Users } from "lucide-react";
 import { usePage } from "@inertiajs/react";
-import SidebarButton from "@/components/layout/SidebarItem";
 import { Group } from "@/types";
-import { router } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenuButton, SidebarMenuItem, SidebarTrigger } from "@/components/ui/sidebar";
 import { Input } from "@/components/ui/input";
 import CreateGroupModal from "@/components/groups/CreateGroupModal";
 import { Button } from "@/components/ui/button";
 import { UserNav } from "@/components/user/user-nav";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function AppSidebar({ active = false, className = "", ...props }) {
     const groups = usePage().props.groups as Group[] || [];
@@ -26,10 +25,10 @@ export default function AppSidebar({ active = false, className = "", ...props })
                 <div className="flex items-center gap-2">
                     <div className="relative w-8 h-8">
                         <div className="absolute inset-0 flex justify-center items-center bg-primary rounded-md font-bold text-primary-foreground text-lg">
-                            G
+                            <i className="fa-solid fa-graduation-cap"></i>
                         </div>
                     </div>
-                    <span className="font-bold text-xl">GroupHub</span>
+                    <span className="font-bold text-xl">Modulus</span>
                 </div>
                 <div className="flex items-center gap-2 mt-2">
                     <div className="relative flex-1">
@@ -44,22 +43,24 @@ export default function AppSidebar({ active = false, className = "", ...props })
                 </div>
             </SidebarHeader>
             <SidebarContent className="px-2 py-2">
-                <SidebarMenuButton isActive={url === "/"} >
-                    <a className="flex items-center gap-2 w-full" href="/dashboard">
-                        <Users className="w-4 h-4" />
-                        <span>All Groups</span>
-                    </a>
-                </SidebarMenuButton>
-                {filteredGroups.map((group) => (
-                    <SidebarMenuButton key={group.id} asChild isActive={url === `/groups/${group.id}`}>
-                        <a href={`/groups/${group.id}`} className="flex items-center gap-2 w-full truncate">
-                            <div className="flex justify-center items-center bg-primary/10 rounded-sm w-4 h-4 font-medium text-primary text-xs">
-                                {group.name.charAt(0)}
-                            </div>
-                            <span>{group.name}</span>
+                <ScrollArea className="h-[calc(100vh-13rem)]">
+                    <SidebarMenuButton isActive={url === "/"} className="hover:bg-primary/10">
+                        <a className="flex items-center gap-2 w-full" href="/dashboard">
+                            <Users className="w-4 h-4" />
+                            <span>All Groups</span>
                         </a>
                     </SidebarMenuButton>
-                ))}
+                    {filteredGroups.map((group) => (
+                        <SidebarMenuButton key={group.id} asChild isActive={url === `/groups/${group.id}`} className="hover:bg-primary/10">
+                            <a href={`/groups/${group.id}`} className="flex items-center gap-2 w-full truncate">
+                                <div className="flex justify-center items-center bg-primary/10 rounded-sm w-4 h-4 font-medium text-primary text-xs">
+                                    {group.name.charAt(0)}
+                                </div>
+                                <span>{group.name}</span>
+                            </a>
+                        </SidebarMenuButton>
+                    ))}
+                </ScrollArea>
             </SidebarContent>
             <SidebarFooter className="p-2 border-t">
                 <div className="gap-2 grid">
