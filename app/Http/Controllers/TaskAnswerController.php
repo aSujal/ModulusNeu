@@ -3,42 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateOrUpdateTaskAnswerRequest;
+use App\Http\Requests\UpdateTaskAnswer;
+use App\Models\Task;
 use App\Models\TaskAnswer;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class TaskAnswerController extends Controller
 {
-    public function index()
+    public function show($answerId)
     {
-    }
-
-    public function show($id)
-    {
-        // Logic to display a specific task answer
         return view('task_answers.show', compact('id'));
     }
 
-    public function create()
+    public function store(int $taskId,CreateOrUpdateTaskAnswerRequest $request)
     {
-        // Logic to show form for creating a new task answer
-        return Inertia::render('TaskAnswer/Create');
-    }
+        if (TaskAnswer::findOrFail($taskId)) {
+            return $this->backWith('error', 'You can not uplaod a new answer.');
+        }
 
-    public function store($taskId,CreateOrUpdateTaskAnswerRequest $request)
-    {
         $validated = $request->validated();
         if($request->hasFile("file")){
             $file= Storage::disk("local")->put("tasks", $request->file("file"));
         }
-        $task = TaskAnswer::create([
+
+        Auth::user()->taskAnswers()->create([
             "name" => $validated["name"],
             "file" => $file,
             "text" => $request["text"],
-            "score" => 0,
-            "task_id" => $taskId,
-            "user_id" => $request->user()->id,
+            "task_id" => $taskId
         ]);
         
         return $this->backWith(
@@ -47,15 +43,35 @@ class TaskAnswerController extends Controller
         );
     }
 
-    public function edit($id)
+    public function update($id, UpdateTaskAnswer $request)
     {
-    }
+        $task = TaskAnswer::findOrFail($$id);
+        $validated = $request->validated();
 
-    public function update(Request $request, $id)
-    {
+
+        if($request->hasFile("file")){
+            $file = Storage::disk("local")->put("tasks", $request->file("file"));
+        }
+
+        $task->update([
+            "name" => $validated["name"],
+            "file" => $file,
+            "text" => $request["text"]
+        ]);
+        
+        return $this->backWith(
+            'success',
+            'Task answer updated successfully'
+        );
     }
 
     public function destroy($id)
     {
+        TaskAnswer::destroy($$id);
+
+        return $this->backWith(
+            'success',
+            'Task answer deleted successfully'
+        );
     }
 }

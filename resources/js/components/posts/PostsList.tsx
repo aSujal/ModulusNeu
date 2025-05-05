@@ -5,6 +5,7 @@ import { Group } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from '../ui/button';
+import { router } from '@inertiajs/react';
 
 interface PostListProps {
     group: Group;
@@ -25,6 +26,14 @@ const PostsList = ({
             </div>
         )
     }
+
+    const handleDeletePost = async (postId: number) => {
+        try {
+            await router.delete(`/posts/${postId}`);
+        } catch (error) {
+            console.error("Error deleting group:", error);
+        }
+    };
 
     return (
         <div className='space-y-4'>

@@ -38,6 +38,18 @@ export interface Task {
     due_date: Date,
     updated_at: Date,
     created_at: Date,
+    responses: TaskResponse[],
+}
+
+export interface TaskResponse {
+    id: number,
+    text: string,
+    file: string | null,
+    score: number,
+    task_id: number,
+    user_id: number,
+    updated_at: Date,
+    created_at: Date,
 }
 
 export type PageProps<
