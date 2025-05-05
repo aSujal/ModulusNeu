@@ -32,7 +32,7 @@ class CreateOrUpdateTaskRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'file' => ['file', 'nullable'],
             'text' => ['required', 'string'],
-            'due_date' => ['nullable', 'datetime', 'after:today'],
+            'due_date' => ['nullable', 'date', 'after:today'],
             'max_score' => ['required', 'integer', 'min:0'],
         ];
     }

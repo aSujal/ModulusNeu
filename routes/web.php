@@ -49,12 +49,10 @@ Route::middleware('auth')->group(function () {
     // Route::delete('/groups/{groupId}/task/{taskId}/delete', [TaskController::class, 'destroy'])->name('create.group.delete-task');
     Route::get('/task/{taskId}', [TaskController::class, 'index'])->name('group.task');
 
-    // Route::get('/task/{taskId}/answers', [TaskAnswerController::class, 'index'])->name('task.answers');
-    Route::get('/task/{taskId}/answers/create', [TaskAnswerController::class, 'create'])->name('task.create-answer');
-    Route::post('/task/{taskId}/answers/create', [TaskAnswerController::class, 'store'])->name('task.store-answer');
-    // Route::get('/task/{taskId}/answers/{answerId}/edit', [TaskAnswerController::class, 'edit'])->name('task.edit-answer');
-    // Route::put('/task-answers/update/{taskId}/{answerId}', [TaskAnswerController::class, 'update'])->name('task_answers.update');
-    // Route::delete('/task-answers/delete/{taskId}/{answerId}', [TaskAnswerController::class, 'destroy'])->name('task_answers.delete');
+    Route::get('/task-answers/{answerId}', [TaskAnswerController::class, 'show'])->name('task.answers');
+    Route::post('/task/{taskId}/task-answers/create', [TaskAnswerController::class, 'store'])->name('task.store-answer');
+    Route::put('/task-answers/update/{id}', [TaskAnswerController::class, 'update'])->name('task_answers.update');
+    Route::delete('/task-answers/delete/{id}', [TaskAnswerController::class, 'destroy'])->name('task_answers.delete');
     Route::get('/tasks/files/{filenameWithoutExtension}', [TaskController::class, 'showFile']);
     
 

@@ -7,6 +7,8 @@ import { Group, Post, Task } from '@/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { ViewTaskDialog } from './ViewTask';
+import { usePage } from '@inertiajs/react';
 
 interface PostListProps {
     group: Group;
@@ -17,6 +19,7 @@ const TasksList = ({
 }: PostListProps) => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [loading, setLoading] = useState(true);
+    const user = usePage().props.auth.user;
 
     useEffect(() => {
         fetch(`/groups/${group.id}/tasks`)
@@ -49,6 +52,8 @@ const TasksList = ({
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
 
+    const isAdmin = group.groupMembers?.some(e => e.id === user.id && (e.role === "owner" || e.role === "admin"))
+
     return (
         <div className='space-y-4'>
             {sortedTasks?.map((task) => (
@@ -63,7 +68,7 @@ const TasksList = ({
                                 <div className="flex items-center gap-2">
                                     <CardTitle className="text-base">{task.title}</CardTitle>
                                     <CardDescription>
-                                        {/* {task.user.name}  */}• {formatDistanceToNow(new Date(task.created_at), { addSuffix: true })}
+                                        • {formatDistanceToNow(new Date(task.created_at), { addSuffix: true })}
                                     </CardDescription>
                                 </div>
                             </div>
@@ -83,25 +88,11 @@ const TasksList = ({
                     </CardHeader>
 
                     <CardContent>
-                        <div className="max-w-none prose prose-sm" dangerouslySetInnerHTML={{ __html: task.text }} />
+                        <div className="max-w-none max-h-12 truncate prose prose-sm" dangerouslySetInnerHTML={{ __html: task.text }} />
                         {task.file && task.file.length > 0 && (
                             <div className="mt-4">
                                 <h4 className="mb-2 font-medium text-sm">Attachments</h4>
                                 <div className="space-y-2">
-                                    {/* {task.file.map((attachment, index) => (
-                                        <div key={index} className="flex items-center gap-2 p-2 border rounded-md">
-                                            <div className="flex-1 text-sm truncate">{attachment.name}</div>
-                                            <Button size="sm" variant="outline">
-                                                <a href={`${window.location.origin}/tasks/files/${attachment.split('/').pop()?.replace(/\.[^/.]+$/, "")}`}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    download
-                                                >
-                                                    Download
-                                                </a>
-                                            </Button>
-                                        </div>
-                                    ))} */}
                                     <div className="flex items-center gap-2 p-2 border rounded-md">
                                         <div className="flex-1 text-sm truncate">{task.file}</div>
                                         <Button size="sm" variant="outline">
@@ -122,7 +113,9 @@ const TasksList = ({
                     <CardFooter className="pt-4 border-t">
                         <div className='flex justify-between items-center w-full'>
                             <span><strong>Score: </strong> 0/{task.max_score}</span>
-                            <Button>View</Button>
+                            <ViewTaskDialog groupId={group.id} task={task} isAdmin={isAdmin}>
+                                <Button>View</Button>
+                            </ViewTaskDialog>
                         </div>
                     </CardFooter>
                 </Card>

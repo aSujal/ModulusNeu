@@ -39,7 +39,10 @@ export function CreateTaskDialog({ children, groupId, onCreated }: CreateTaskDia
     const [maxScore, setMaxScore] = useState(100)
     const [files, setFiles] = useState<File[]>([])
     const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
-
+    
+    function toMySQLDateTime(date: Date): string {
+        return date.toISOString().slice(0, 19).replace('T', ' ');
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -49,6 +52,7 @@ export function CreateTaskDialog({ children, groupId, onCreated }: CreateTaskDia
                 file: files[0] ?? null,
                 text: text,
                 max_score: maxScore,
+                due_date: dueDate ? toMySQLDateTime(dueDate) : null,
                 group_id: groupId
             }, {
                 onSuccess: () => {
@@ -57,6 +61,7 @@ export function CreateTaskDialog({ children, groupId, onCreated }: CreateTaskDia
                     setTitle("")
                     setText("")
                     setMaxScore(100)
+                    setDueDate(undefined)
                     setFiles([])
                     onCreated?.();
                 },
@@ -78,7 +83,7 @@ export function CreateTaskDialog({ children, groupId, onCreated }: CreateTaskDia
         setText(value.html)
     };
 
-    const isDisabled = !title.trim() || !text.trim() || !dueDate || dueDate === null || !maxScore 
+    const isDisabled = !title.trim() || !text.trim() || !dueDate || dueDate === null || !maxScore
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
