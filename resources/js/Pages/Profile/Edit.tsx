@@ -12,16 +12,20 @@ export default function Edit({
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-white">
-                    Profile
+                <h2 className="text-2xl font-bold text-foreground">
+                    Profile Settings
                 </h2>
             }
         >
-            <Head title="Profile" />
+            <Head title="Profile Settings" />
 
-            <div className="py-12">
+            <div className="py-12 bg-background min-h-screen">
                 <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-900 dark:text-white">
+                    {/* Profile Information */}
+                    <div className="bg-card p-6 shadow sm:rounded-lg border border-gray-300 dark:border-gray-700">
+                        <h3 className="text-lg font-semibold text-foreground mb-4">
+                            Update Profile Information
+                        </h3>
                         <UpdateProfileInformationForm
                             mustVerifyEmail={mustVerifyEmail}
                             status={status}
@@ -29,11 +33,22 @@ export default function Edit({
                         />
                     </div>
 
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-900 dark:text-white">
+                    {/* Password Update */}
+                    <div className="bg-card p-6 shadow sm:rounded-lg border border-gray-300 dark:border-gray-700">
+                        <h3 className="text-lg font-semibold text-foreground mb-4">
+                            Change Password
+                        </h3>
                         <UpdatePasswordForm className="max-w-xl" />
                     </div>
 
-                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8 dark:bg-gray-900 dark:text-white">
+                    {/* Delete Account */}
+                    <div className="bg-card p-6 shadow sm:rounded-lg border border-gray-300 dark:border-gray-700">
+                        <h3 className="text-lg font-semibold text-red-500 mb-4">
+                            Delete Account
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-4">
+                            Once you delete your account, there is no going back. Please be certain.
+                        </p>
                         <DeleteUserForm className="max-w-xl" />
                     </div>
                 </div>
