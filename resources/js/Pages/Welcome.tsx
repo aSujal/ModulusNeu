@@ -34,7 +34,7 @@ export default function Welcome({
       {auth.user ? (
         <Link
           href={route('dashboard')}
-          className="text-blue-600 hover:text-blue-800 text-lg transition"
+          className="text-green-600 hover:text-blue-800 text-lg transition"
         >
           Dashboard
         </Link>
@@ -42,13 +42,13 @@ export default function Welcome({
         <>
           <Link
             href={route('login')}
-            className="text-blue-600 hover:text-blue-800 text-lg transition"
+            className="text-green-600 hover:text-blue-800 text-lg transition"
           >
             Log in
           </Link>
           <Link
             href={route('register')}
-            className="text-blue-600 hover:text-blue-800 text-lg transition"
+            className="text-green-600 hover:text-blue-800 text-lg transition"
           >
             Register
           </Link>
@@ -67,14 +67,12 @@ export default function Welcome({
             <div className="lg:w-1/2">
                 <h2 className="mb-2 text-green-400 text-lg">Modulus</h2>
                 <h1 className="mb-4 font-extrabold text-green-500 text-5xl">
-                    Willkommen zu unserer Lernplattform.
+                Willkommen auf unserer Lernplattform
                 </h1>
                 <p className="mb-6 text-gray-500 text-lg">
-                    MODULUS hilft dir, Wissen aufzubauen und in deinem Tempo zu wachsen. Ob Technik, Design oder Business – wir begleiten dich.
+                MODULUS – Deine Plattform für Wissen und Wachstum. Lerne, entdecke und erreiche deine Ziele in deinem eigenen Tempo. Gemeinsam gestalten wir deine Zukunft.
                 </p>
-                <Button className="bg-green-400 hover:bg-green-500 px-6 py-2 rounded text-white text-lg">
-                    Sign up
-                </Button>
+              
             </div>
 
             {/* Illustration */}    
