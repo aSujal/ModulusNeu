@@ -1,7 +1,6 @@
 import { PageProps } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card"
-import { Button } from "@/Components/ui/button"
+import { Button } from "@/components/ui/button"
 
 export default function Welcome({
     auth,
@@ -20,22 +19,22 @@ export default function Welcome({
     };
 
     return (
-        <main className="min-h-screen flex flex-col bg-background text-foreground px-6 py-8">
+        <main className="flex flex-col bg-background px-6 py-8 min-h-screen text-foreground">
       
-      <header className="flex justify-between items-center w-full mb-12">
+      <header className="flex justify-between items-center mb-12 w-full">
   {/* Logo-Text */}
-  <div className="text-2xl font-bold text-wihte">
+  <div className="font-bold text-wihte text-2xl">
     Modulus
-    <i className="fa-solid fa-graduation-cap text-green-600 text-2xl"></i>
+    <i className="text-green-600 text-2xl fa-solid fa-graduation-cap"></i>
   </div>
 
   {/* Rechts: Auth Links + Icon */}
   <div className="flex items-center space-x-4">
-    <nav className="space-x-6 text-lg text-gray-700">
+    <nav className="space-x-6 text-gray-700 text-lg">
       {auth.user ? (
         <Link
           href={route('dashboard')}
-          className="text-blue-600 hover:text-blue-800 transition text-lg"
+          className="text-blue-600 hover:text-blue-800 text-lg transition"
         >
           Dashboard
         </Link>
@@ -43,13 +42,13 @@ export default function Welcome({
         <>
           <Link
             href={route('login')}
-            className="text-blue-600 hover:text-blue-800 transition text-lg"
+            className="text-blue-600 hover:text-blue-800 text-lg transition"
           >
             Log in
           </Link>
           <Link
             href={route('register')}
-            className="text-blue-600 hover:text-blue-800 transition text-lg"
+            className="text-blue-600 hover:text-blue-800 text-lg transition"
           >
             Register
           </Link>
@@ -62,18 +61,18 @@ export default function Welcome({
 </header>
 
         {/* Hero Section */}
-        <section className="flex-1 flex flex-col-reverse lg:flex-row items-center justify-between gap-10 max-w-6xl mx-auto">
+        <section className="flex lg:flex-row flex-col-reverse flex-1 justify-between items-center gap-10 mx-auto max-w-6xl">
             
             {/* Text Content */}
             <div className="lg:w-1/2">
-                <h2 className="text-green-400 text-lg mb-2">Modulus</h2>
-                <h1 className="text-5xl font-extrabold text-green-500 mb-4">
+                <h2 className="mb-2 text-green-400 text-lg">Modulus</h2>
+                <h1 className="mb-4 font-extrabold text-green-500 text-5xl">
                     Willkommen zu unserer Lernplattform.
                 </h1>
-                <p className="text-lg text-gray-500 mb-6">
+                <p className="mb-6 text-gray-500 text-lg">
                     MODULUS hilft dir, Wissen aufzubauen und in deinem Tempo zu wachsen. Ob Technik, Design oder Business – wir begleiten dich.
                 </p>
-                <Button className="bg-green-400 hover:bg-green-500 text-white px-6 py-2 text-lg rounded">
+                <Button className="bg-green-400 hover:bg-green-500 px-6 py-2 rounded text-white text-lg">
                     Sign up
                 </Button>
             </div>
@@ -90,11 +89,11 @@ export default function Welcome({
         </section>
 
         {/* Footer with Team */}
-        <footer className="text-center mt-20 text-gray-500 text-sm">
+        <footer className="mt-20 text-gray-500 text-sm text-center">
             <p className="mb-1">
-                <span className="text-gray-700 font-semibold">Mitgewirkt:</span> Victory · Sujal · Basit · Alirazer
+                <span className="font-semibold text-gray-700">Mitgewirkt:</span> Victory · Sujal · Basit · Alirazer
             </p>
-            <p className="text-xs text-gray-600">Powered by ibisacam</p>
+            <p className="text-gray-600 text-xs">Powered by ibisacam</p>
         </footer>
     </main>
       )
