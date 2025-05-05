@@ -29,8 +29,19 @@ export function CreatePostDialog({ children, groupId }: CreatePostDialogProps) {
     const [open, setOpen] = useState(false)
     const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
-    const [publishDate, setPublishDate] = useState<Date | undefined>(undefined)
 
+    const handlePost = async () => {
+        try {
+            const data = {
+                title: "irgendwas",
+                description: "irgendwas",
+            }
+            await router.post(`/groups/${group.id}/post/create`, data)
+        } catch (error) {
+            toast.error("ha")
+        }
+    }
+    
     const handleEditorChange = (value: {
         body: string;
         html: string;
@@ -59,23 +70,7 @@ export function CreatePostDialog({ children, groupId }: CreatePostDialogProps) {
                             required
                         />
                     </div>
-                    <div className="gap-2 grid">
-                        <Label>Publish at</Label>
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    className={cn("w-full justify-start text-left font-normal", !publishDate && "text-muted-foreground")}
-                                >
-                                    <CalendarIcon className="mr-2 w-4 h-4" />
-                                    {publishDate ? format(publishDate, "PPP") : "Select a date"}
-                                </Button>
-                            </PopoverTrigger>
-                            <PopoverContent className="p-0 w-auto">
-                                <Calendar mode="single" selected={publishDate} onSelect={setPublishDate} initialFocus />
-                            </PopoverContent>
-                        </Popover>
-                    </div>
+                    
                     <div className="gap-2 grid">
                         <Label htmlFor="content">Content</Label>
                         <RichTextEditor onChange={handleEditorChange} placeholder="Write your post content here..." />

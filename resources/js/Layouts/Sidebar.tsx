@@ -6,7 +6,7 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenuButto
 import { Input } from "@/components/ui/input";
 import CreateGroupModal from "@/components/groups/CreateGroupModal";
 import { Button } from "@/components/ui/button";
-import { UserNav } from "@/components/user/user-nav";
+import { UserNav } from "@/components/user/UserNav";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function AppSidebar({ active = false, className = "", ...props }) {

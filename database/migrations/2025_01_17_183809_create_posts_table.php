@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string("title");
             $table->text("description");
-            $table->string("status");
-            $table->date("publish_at");
             $table->foreignId("group_id")->constrained()->onDelete('cascade');
             $table->timestamps();
         });

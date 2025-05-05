@@ -44,6 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/groups/{groupId}/task/create', [TaskController::class, 'store'])->name('group.store-task');
     // Route::get('/groups/{groupId}/task/{taskId}/edit', [TaskController::class, 'edit'])->name('create.group.edit-task');
     Route::put('/groups/{groupId}/task/{taskId}/update', [TaskController::class, 'update'])->name('group.update-task');
+    Route::get('/groups/{groupId}/tasks', [TaskController::class, 'getTasksForGroup'])->name('groups.tasks');
+
     // Route::delete('/groups/{groupId}/task/{taskId}/delete', [TaskController::class, 'destroy'])->name('create.group.delete-task');
     Route::get('/task/{taskId}', [TaskController::class, 'index'])->name('group.task');
 
@@ -53,6 +55,7 @@ Route::middleware('auth')->group(function () {
     // Route::get('/task/{taskId}/answers/{answerId}/edit', [TaskAnswerController::class, 'edit'])->name('task.edit-answer');
     // Route::put('/task-answers/update/{taskId}/{answerId}', [TaskAnswerController::class, 'update'])->name('task_answers.update');
     // Route::delete('/task-answers/delete/{taskId}/{answerId}', [TaskAnswerController::class, 'destroy'])->name('task_answers.delete');
+    Route::get('/tasks/files/{filenameWithoutExtension}', [TaskController::class, 'showFile']);
     
 
     Route::post('/groups/{groupId}/post/create', [PostController::class, 'create'])->name('post.create.post');

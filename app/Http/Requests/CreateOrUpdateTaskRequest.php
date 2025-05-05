@@ -17,7 +17,8 @@ class CreateOrUpdateTaskRequest extends FormRequest
         $group = Group::find($this->route('groupId'));
         // Auth::user()->can('create', $group);
         // dd($this->user()->can('create', [Task::class,$group]));
-        return $group && $this->user()->can('create', [Task::class,$group]);
+        // dd( $group);
+        return $group && $this->user()->can('create', [Task::class, $group]);
     }
 
     /**
@@ -29,9 +30,10 @@ class CreateOrUpdateTaskRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'file' => ['file'],
+            'file' => ['file', 'nullable'],
             'text' => ['required', 'string'],
-            'score' => ['required', 'integer', 'min:0'], 
+            'due_date' => ['nullable', 'datetime', 'after:today'],
+            'max_score' => ['required', 'integer', 'min:0'],
         ];
     }
 }

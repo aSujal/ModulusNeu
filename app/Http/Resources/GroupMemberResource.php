@@ -14,7 +14,7 @@ class GroupMemberResource extends JsonResource
         return [
             "id" => $this->id,
             'role' => $this->pivot->role,
-            'user' => $this->full_name
+            'user_name' => $this->full_name
         ];
     }
 }

@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { router } from '@inertiajs/react';
 import { Group, GroupMember } from '@/types';
@@ -9,37 +9,26 @@ import { toast } from 'sonner';
 import InviteModal from '@/components/groups/InviteModal';
 import { FileText, PlusCircle, Users } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { UserItem } from '@/components/UserItem';
 import { GroupMembers } from '@/components/groups/GroupMembers';
 import { CreatePostDialog } from '@/components/posts/CreatePost';
 import { CreateTaskDialog } from '@/components/tasks/CreateTask';
+import TasksList from '@/components/tasks/TasksList';
 
 export default function Index({ group }: { group: Group; }) {
   const [groupName, setGroupName] = useState(group.name);
   const [inviteOpen, setInviteOpen] = useState(false);
-  const groupMembers = group.groupMembers;
+  const groupMembers = group?.groupMembers ?? [];
+  const [taskListKey, setTaskListKey] = useState(0);
+  const user = usePage().props.auth.user;
 
-  const [members, setMembers] = useState(groupMembers);
+  const handleTaskCreated = () => {
+    setTaskListKey(prev => prev + 1);
+  };
+
   console.log("group", group)
   console.log("groupMembers", groupMembers)
   const handleGroupNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGroupName(e.target.value);
-  };
-
-  const handleRoleChange = async (memberId: number, newRole: string) => {
-    setMembers(members.map((member) =>
-      member.id === memberId ? { ...member, role: newRole } : member
-    ));
-
-    try {
-      await router.post(`/groups/update-user-role`, {
-        group_id: group.id,
-        user_id: memberId,
-        new_role: newRole,
-      });
-    } catch (error) {
-      console.error("Error updating role:", error);
-    }
   };
 
   const handleGroupNameSubmit = async (e: React.FormEvent) => {
@@ -51,16 +40,6 @@ export default function Index({ group }: { group: Group; }) {
     }
   };
 
-  const handleDeleteMember = async (memberId: number) => {
-    setMembers(members.filter(member => member.id !== memberId));
-    try {
-      await router.delete(`/groups/${group.id}/members/${memberId}`, {});
-    } catch (error) {
-      console.error("Error deleting member:", error);
-
-      setMembers(prevState => [...prevState]);
-    }
-  };
   const handleDeleteGroup = async () => {
     const confirmDelete = confirm("Are you sure you want to delete this group? This action cannot be undone.");
     if (!confirmDelete) return;
@@ -70,19 +49,8 @@ export default function Index({ group }: { group: Group; }) {
       console.error("Error deleting group:", error);
     }
   };
-  const handlePost = async () => {
-    try {
-      const data = {
-        title: "irgendwas",
-        status: "public",
-        description: "irgendwas",
-        publish_at: new Date()
-      }
-      await router.post(`/groups/${group.id}/post/create`, data)
-    } catch (error) {
-      toast.error("ha")
-    }
-  }
+
+  const isAdmin = groupMembers?.find(e => e.id === user.id && (e.role === "owner" || e.role === "admin"))
 
   return (
     <AuthenticatedLayout>
@@ -115,31 +83,35 @@ export default function Index({ group }: { group: Group; }) {
               <TabsTrigger value="posts">Posts</TabsTrigger>
               <TabsTrigger value="tasks">Tasks</TabsTrigger>
             </TabsList>
-            <div className='flex items-center gap-2'>
-              <CreatePostDialog groupId={group.id}>
-                <Button size="sm" variant="outline">
-                  <FileText className="mr-2 w-4 h-4" />
-                  New Post
-                </Button>
-              </CreatePostDialog>
-              <CreateTaskDialog groupId={group.id}>
-                <Button size="sm">
-                  <PlusCircle className="mr-2 w-4 h-4" />
-                  New Task
-                </Button>
-              </CreateTaskDialog>
-            </div>
+            {isAdmin && (
+              <div className='flex items-center gap-2'>
+                <CreatePostDialog groupId={group.id}>
+                  <Button size="sm" variant="outline">
+                    <FileText className="mr-2 w-4 h-4" />
+                    New Post
+                  </Button>
+                </CreatePostDialog>
+                <CreateTaskDialog groupId={group.id} onCreated={handleTaskCreated}>
+                  <Button size="sm">
+                    <PlusCircle className="mr-2 w-4 h-4" />
+                    New Task
+                  </Button>
+                </CreateTaskDialog>
+              </div>
+            )}
           </div>
           <TabsContent value="posts" className="mt-4">
             <PostsList group={group} />
           </TabsContent>
           <TabsContent value="tasks" className="mt-4">
-            {/* <TasksList groupId={group.id} /> */}
+            <TasksList key={taskListKey} group={group} />
           </TabsContent>
         </Tabs>
-        <aside className="hidden md:block top-16 sticky h-[calc(100vh-8rem)]">
-          <GroupMembers group={group} />
-        </aside >
+        {groupMembers.length > 0 && (
+          <aside className="hidden md:block top-16 sticky h-[calc(100vh-8rem)]">
+            <GroupMembers group={group} />
+          </aside >
+        )}
       </div >
     </AuthenticatedLayout >
   );
