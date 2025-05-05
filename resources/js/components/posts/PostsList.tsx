@@ -36,7 +36,7 @@ const PostsList = ({
             </div>
         )
     }
-
+    console.log("s", sortedPosts)
     return (
         <div className='space-y-4'>
             {sortedPosts.map((post) => (
@@ -50,7 +50,7 @@ const PostsList = ({
                                     </Avatar> */}
                                     <CardTitle className='text-base'>{post.title}</CardTitle>
                                     <CardDescription>
-                                        {/* {post.author.name} */} • {formatDistanceToNow(post.created_at, { addSuffix: true })}
+                                        {/* {post.author.name} */} • {formatDistanceToNow(new Date(post?.created_at), { addSuffix: true })}
                                     </CardDescription>
                                 </div>
                             </div>
