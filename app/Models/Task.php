@@ -11,7 +11,8 @@ class Task extends Model
         'title',
         'file',
         'text',
-        'score',
+        'max_score',
+        'due_date',
         'group_id',
     ];
     public function group()

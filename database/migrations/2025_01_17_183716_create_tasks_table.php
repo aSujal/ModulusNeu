@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string("title");
-            $table->string("file");
+            $table->string("file")->nullable();
             $table->string("text");
-            $table->integer("score");
+            $table->integer("max_score");
+            $table->dateTime("due_date")->nullable();
             $table->foreignId("group_id")->constrained()->onDelete('cascade');
             $table->timestamps();
         });

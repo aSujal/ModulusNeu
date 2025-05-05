@@ -1,31 +1,20 @@
 import React from 'react'
-import { differenceInMinutes, format, formatDistanceToNow, isToday, isYesterday } from "date-fns";
-// import ChannelHero from './channel-hero';
-import { Loader } from 'lucide-react';
-// import ConversationHero from './converstation-hero';
-import { Group, Post } from '@/types';
+import { formatDistanceToNow, } from "date-fns";
+import { MoreHorizontal } from 'lucide-react';
+import { Group } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Avatar, AvatarFallback } from '../ui/avatar';
-
-const TIME_THRESHOLD = 5;
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Button } from '../ui/button';
 
 interface PostListProps {
     group: Group;
 }
 
-const formatDateLabel = (dateStr: string) => {
-    const date = new Date(dateStr);
-    if (isToday(date)) return "Today";
-    if (isYesterday(date)) return "Yesterday";
-    return format(date, "EEEE, MMMM d");
-}
-
-
 const PostsList = ({
     group
 }: PostListProps) => {
     const sortedPosts = [...(group?.posts || [])].sort((a, b) => {
-        return new Date(b.publish_at).getTime() - new Date(a.publish_at).getTime();
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
 
     if (sortedPosts.length === 0) {
@@ -36,7 +25,7 @@ const PostsList = ({
             </div>
         )
     }
-    console.log("s", sortedPosts)
+
     return (
         <div className='space-y-4'>
             {sortedPosts.map((post) => (
@@ -54,6 +43,18 @@ const PostsList = ({
                                     </CardDescription>
                                 </div>
                             </div>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="w-8 h-8">
+                                        <MoreHorizontal className="w-4 h-4" />
+                                        <span className="sr-only">Task options</span>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                                    <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
                     </CardHeader>
                     <CardContent>

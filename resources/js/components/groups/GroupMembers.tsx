@@ -5,12 +5,36 @@ import { Crown, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Group } from "@/types"
+import { router } from "@inertiajs/react"
 
 interface GroupMembersProps {
     group: Group
 }
 
 export function GroupMembers({ group }: GroupMembersProps) {
+
+    const makeAdmin = async (memberId: number) => {
+        try {
+            await router.post(`/groups/update-user-role`, {
+                group_id: group.id,
+                user_id: memberId,
+                new_role: "admin",
+            });
+        } catch (error) {
+            console.error("Error updating role:", error);
+        }
+    };
+    const handleDeleteMember = async (memberId: number) => {
+        try {
+            await router.delete(`/groups/${group.id}/members/${memberId}`, {});
+        } catch (error) {
+            console.error("Error deleting member:", error);
+        }
+    };
+    
+    if(!group.groupMembers) {
+        return null
+    }
 
     return (
         <Card>
@@ -27,11 +51,11 @@ export function GroupMembers({ group }: GroupMembersProps) {
                             <div key={member.id} className="flex justify-between items-center py-2">
                                 <div className="flex items-center gap-3">
                                     <Avatar className="w-8 h-8">
-                                        <AvatarFallback>{member.user.charAt(0)}</AvatarFallback>
+                                        <AvatarFallback>{member.user_name.charAt(0)}</AvatarFallback>
                                     </Avatar>
                                     <div className="flex flex-col">
                                         <div className="flex items-center gap-1">
-                                            <span className="font-medium text-sm">{member.user}</span>
+                                            <span className="font-medium text-sm">{member.user_name}</span>
                                             {member.role === "admin" && <Crown className="w-3 h-3 text-amber-500" />}
                                         </div>
                                     </div>
@@ -44,8 +68,8 @@ export function GroupMembers({ group }: GroupMembersProps) {
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
-                                            <DropdownMenuItem>Make admin</DropdownMenuItem>
-                                            <DropdownMenuItem className="text-destructive">Remove from group</DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => makeAdmin(member.id)}>Make admin</DropdownMenuItem>
+                                            <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteMember(member.id)}>Remove from group</DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 )}

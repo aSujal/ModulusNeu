@@ -32,7 +32,6 @@ class TaskPolicy
     {
         $ownedGroup = $user->ownedGroups()->where('id', $group->id)->first();
         $joinedGroup = $user->groups()->where('group_id', $group->id)->first();
-
         return $ownedGroup || optional($joinedGroup?->pivot)->role === 'admin';
     }
 

@@ -17,19 +17,27 @@ export interface Group {
 export interface GroupMember {
     id: number;
     role: string;
-    user: string;
+    user_name: string;
 }
 
 export interface Post {
     id: number;
     title: string,
-    status: string,
     updated_at: Date,
     created_at: Date,
-    publish_at: Date,
     type: string,
     group_id: number,
     description: string,
+}
+export interface Task {
+    id: number,
+    title: string,
+    file: string | null,
+    text: string,
+    max_score: number,
+    due_date: Date,
+    updated_at: Date,
+    created_at: Date,
 }
 
 export type PageProps<

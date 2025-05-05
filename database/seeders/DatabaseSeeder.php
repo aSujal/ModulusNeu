@@ -34,9 +34,7 @@ class DatabaseSeeder extends Seeder
             foreach (range(1, 10) as $index) {
                 $group->posts()->create([
                     'title' => "Post Title " . $index,
-                    'status' => "öffentlich",
                     'description' => "This is a sample description for post " . $index,
-                    'publish_at' => Carbon::now()->addDays(rand(1, 50))
                 ]);
             }
 
@@ -58,16 +56,14 @@ class DatabaseSeeder extends Seeder
             foreach (range(1, rand(2, 5)) as $postIndex) {
                 $post = $group->posts()->create([
                     'title' => 'Post ' . $postIndex . ' for ' . $group->name,
-                    'status' => 'public',
                     'description' => 'This is a description for post ' . $postIndex . ' in ' . $group->name,
-                    'publish_at' => Carbon::now()->addDays(rand(1, 10)),
                 ]);
             }
         }
         $group = Group::find(1);
         $group->groupMembers()->attach(
             $specificUser->id,
-            ['role' => 'owner']
+            ['role' => 'admin']
         );
     }
 }

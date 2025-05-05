@@ -19,9 +19,7 @@ class PostController extends Controller
         $validated = $request->validated();
         $post = Group::findOrFail($groupId)->posts()->create([
             "title" => $validated["title"],
-            "status" => $validated["status"],
             "description" => $validated["description"],
-            "publish_at" => Carbon::parse($validated["publish_at"])->toDateTimeString(),
         ]);
 
         return $this->backWith(
@@ -37,9 +35,7 @@ class PostController extends Controller
             $validated = $request->validated();
             $post->update([
                 "title" => $validated["title"],
-                "status" => $validated["status"],
                 "description" => $validated["description"],
-                "publish_at" => Carbon::parse($validated["publish_at"])->toDateTimeString(),
             ]);
 
             return $this->backWith('success','Post updated successfully!');

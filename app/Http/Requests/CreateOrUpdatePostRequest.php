@@ -21,9 +21,7 @@ class CreateOrUpdatePostRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
             'description' => 'required|string',
-            'publish_at' => 'required|date'
         ];
     }
 }
