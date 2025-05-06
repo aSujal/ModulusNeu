@@ -27,8 +27,8 @@ class CreateOrUpdateTaskAnswerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'file' => 'file',
+            'name' => 'nullable|string|max:255',
+            'file' => 'nullable|file',
             'text' => 'required|string'
         ];
     }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('task_answers', function (Blueprint $table) {
             $table->id();
             $table->string("name");
-            $table->string("file");
+            $table->string("file")->nullable();
             $table->string("text");
             $table->integer("score")->nullable();
             $table->foreignId("task_id")->constrained()->onDelete('cascade');

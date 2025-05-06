@@ -21,9 +21,9 @@ class TaskAnswerController extends Controller
 
     public function store(int $taskId,CreateOrUpdateTaskAnswerRequest $request)
     {
-        if (TaskAnswer::findOrFail($taskId)) {
-            return $this->backWith('error', 'You can not uplaod a new answer.');
-        }
+        // if (TaskAnswer::findOrFail($taskId)) {
+        //     return $this->backWith('error', 'You can not uplaod a new answer.');
+        // }
 
         $validated = $request->validated();
         if($request->hasFile("file")){
@@ -31,8 +31,9 @@ class TaskAnswerController extends Controller
         }
 
         Auth::user()->taskAnswers()->create([
-            "name" => $validated["name"],
-            "file" => $file,
+            // "name" => $validated["name"],
+            "name" => "",
+            "file" => $file ?? null,
             "text" => $request["text"],
             "task_id" => $taskId
         ]);

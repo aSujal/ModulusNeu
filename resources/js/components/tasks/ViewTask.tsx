@@ -22,6 +22,8 @@ import { Label } from "../ui/label"
 import RichTextEditor from "../ui/rich-text-editor"
 import { FileUploader } from "../ui/FIleUploader"
 import { Delta } from "quill"
+import { router } from "@inertiajs/react"
+import { toast } from "sonner"
 
 interface CreateViewDialogProps {
     children: React.ReactNode
@@ -44,13 +46,35 @@ export function ViewTaskDialog({ children, groupId, task, isAdmin }: CreateViewD
         setResponse(value.html);
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async(e: React.FormEvent) => {
+        const data = {
+            text: response,
+            file: files[0] ?? null,
+        }
         e.preventDefault()
+        try {
+            // /task/{taskId}/task-answers/create
+            await router.post(`/task/${task.id}/task-answers/create`, 
+                            data
+                        , {
+                            onSuccess: () => {
+                                toast.success("Task created!")
+                                setActiveTab("responses")
+                                setResponse("")
+                                setOpen(false)
+                                setFiles([])
+                            },
+                            onError: (error) => {
+                                toast.error("Didn't work unlucky")
+                            }
+                        });
+        }catch (error) {
+            console.error("Error deleting member:", error);
+        }
 
-
-        setResponse("")
-        setFiles([])
-        setActiveTab("responses")
+        // setResponse("")
+        // setFiles([])
+        // setActiveTab("responses")
     }
 
     const dueDate = new Date(task.due_date)
