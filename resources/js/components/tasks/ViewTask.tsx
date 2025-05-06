@@ -57,7 +57,7 @@ export function ViewTaskDialog({ children, groupId, task, isAdmin }: CreateViewD
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent className="flex flex-col sm:max-w-[800px] max-h-[90vh]">
+            <DialogContent className="flex flex-col sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <div className="flex items-center gap-2">
                         <DialogTitle className="text-xl">{task.title}</DialogTitle>
