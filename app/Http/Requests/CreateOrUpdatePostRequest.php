@@ -20,6 +20,7 @@ class CreateOrUpdatePostRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id' => 'nullable|integer|exists:posts,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
         ];

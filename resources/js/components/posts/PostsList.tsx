@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { formatDistanceToNow, } from "date-fns";
 import { MoreHorizontal } from 'lucide-react';
 import { Group } from '@/types';
@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from '../ui/button';
 import { router } from '@inertiajs/react';
+import { EditPostDialog } from './EditPostDialog';
 
 interface PostListProps {
     group: Group;
@@ -35,6 +36,18 @@ const PostsList = ({
         }
     };
 
+    const [selectedPost, setSelectedPost] = useState<{ id: number; title: string; description: string } | null>(null);
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+    const handleEditPost = (post: { id: number; title: string; description: string }) => {
+        setSelectedPost(post);
+        setIsEditDialogOpen(true);
+    };
+
+    const handlePostUpdated = () => {
+        // Refresh the posts list or handle updates
+        setIsEditDialogOpen(false);
+    };
+
     return (
         <div className='space-y-4'>
             {sortedPosts.map((post) => (
@@ -60,7 +73,7 @@ const PostsList = ({
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={()=>handleEditPost(post)}>Edit</DropdownMenuItem>
                                     <DropdownMenuItem onClick={() => handleDeletePost(post.id)} className="text-destructive">Delete</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
@@ -71,6 +84,17 @@ const PostsList = ({
                     </CardContent>
                 </Card>
             ))}
+
+            {/* Render a single EditPostDialog */}
+            {selectedPost && (
+                <EditPostDialog
+                    post={selectedPost}
+                    open={isEditDialogOpen}
+                    groupId={group.id}
+                    // onClose={() => setIsEditDialogOpen(false)}
+                    onUpdated={handlePostUpdated}
+                />
+            )}
         </div>
     )
 }

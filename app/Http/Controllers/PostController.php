@@ -28,19 +28,17 @@ class PostController extends Controller
         );
     }
 
-    public function update(int $id, CreateOrUpdatePostRequest $request): RedirectResponse
+    public function update(int $groupId, CreateOrUpdatePostRequest $request): RedirectResponse
     {
-        $post = Post::findOrFail($id);
-        if (Auth::user()->isAdminOrOwner($post->group_id)) {
-            $validated = $request->validated();
-            $post->update([
-                "title" => $validated["title"],
-                "description" => $validated["description"],
-            ]);
+        $validated = $request->validated();
+        $post = Post::findOrFail($validated["id"]);
+        
+        $post->update([
+            "title" => $validated["title"],
+            "description" => $validated["description"],
+        ]);
 
-            return $this->backWith('success','Post updated successfully!');
-        }
-        return $this->backWith('error','You are not an Admin or Owner of this group.');
+        return $this->backWith('success','Post updated successfully!');
     }
 
     public function destroy($postId): RedirectResponse

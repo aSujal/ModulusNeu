@@ -57,7 +57,9 @@ Route::middleware('auth')->group(function () {
     
 
     Route::post('/groups/{groupId}/post/create', [PostController::class, 'create'])->name('post.create.post');
-    Route::put('/post/{id}/update', [PostController::class, 'update'])->name('post.update.post');
+    // Route::put('/post/{id}/update', [PostController::class, 'update'])->name('post.update.post');
+    Route::put('/post/{groupId}/update', [PostController::class, 'update'])->name('post.update.post');
+
     Route::delete('/post/{id}/delete', [PostController::class, 'destroy'])->name('post.delete.post');
 
 });
