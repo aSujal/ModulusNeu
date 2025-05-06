@@ -88,7 +88,9 @@ const TasksList = ({
                     </CardHeader>
 
                     <CardContent>
-                        <div className="max-w-none max-h-12 truncate prose prose-sm" dangerouslySetInnerHTML={{ __html: task.text }} />
+                        <div className="max-w-none max-h-12 truncate prose prose-sm">
+                            {task.text.replace(/<\/?[^>]+(>|$)/g, "").slice(0, 100)}{task.text.length > 100 && "..."}
+                        </div>
                         {task.file && task.file.length > 0 && (
                             <div className="mt-4">
                                 <h4 className="mb-2 font-medium text-sm">Attachments</h4>

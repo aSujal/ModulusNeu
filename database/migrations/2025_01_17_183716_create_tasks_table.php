@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("title");
             $table->string("file")->nullable();
-            $table->string("text");
+            $table->text("text");
             $table->integer("max_score");
             $table->dateTime("due_date")->nullable();
             $table->foreignId("group_id")->constrained()->onDelete('cascade');

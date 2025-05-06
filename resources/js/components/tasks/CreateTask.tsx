@@ -94,7 +94,8 @@ export function CreateTaskDialog({ children, groupId, onCreated }: CreateTaskDia
                         <DialogTitle>Create New Task</DialogTitle>
                         <DialogDescription>Attach files and describe the tasks.</DialogDescription>
                     </DialogHeader>
-                    <div className="gap-4 grid py-4">
+                    {/* Add a scrollable container */}
+                    <div className="gap-4 grid py-4 max-h-[70vh] overflow-y-auto">
                         <div className="gap-4 grid grid-cols-1 sm:grid-cols-2">
                             <div className="gap-2 grid">
                                 <Label htmlFor="title">Title</Label>
