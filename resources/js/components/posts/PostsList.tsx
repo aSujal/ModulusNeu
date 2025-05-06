@@ -29,7 +29,7 @@ const PostsList = ({
 
     const handleDeletePost = async (postId: number) => {
         try {
-            await router.delete(`/posts/${postId}`);
+            await router.delete(`/post/${postId}/delete`);
         } catch (error) {
             console.error("Error deleting group:", error);
         }
@@ -61,7 +61,7 @@ const PostsList = ({
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                     <DropdownMenuItem>Edit</DropdownMenuItem>
-                                    <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => handleDeletePost(post.id)} className="text-destructive">Delete</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>

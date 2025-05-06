@@ -53,11 +53,20 @@ class User extends Authenticatable
 
     public function isAdminOrOwner(int $groupId): bool
     {
-        $groupMember = GroupMember::where('user_id', $this->id)
-            ->where('group_id', $groupId)
-            ->firstOrFail();
+        $group = Group::find($groupId);
 
-        return $groupMember->pivot->role === 'admin' || $groupMember->pivot->role === 'owner';
+        if (!$group) {
+            return false;
+        }
+
+        if ($this->isOwner($group)) {
+            return true;
+        }
+
+        return GroupMember::where('user_id', $this->id)
+            ->where('group_id', $groupId)
+            ->where('role', 'admin')
+            ->exists();
     }
 
 }
