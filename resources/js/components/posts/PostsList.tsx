@@ -5,8 +5,9 @@ import { Group } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from '../ui/button';
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { EditPostDialog } from './EditPostDialog';
+import { is } from 'date-fns/locale';
 
 interface PostListProps {
     group: Group;
@@ -18,7 +19,8 @@ const PostsList = ({
     const sortedPosts = [...(group?.posts || [])].sort((a, b) => {
         return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
-
+    const groupMembers = group?.groupMembers ?? [];
+    const user = usePage().props.auth.user;
     if (sortedPosts.length === 0) {
         return (
             <div className="flex flex-col justify-center items-center p-8 border border-dashed rounded-lg text-center">
@@ -27,6 +29,9 @@ const PostsList = ({
             </div>
         )
     }
+
+    const isAdmin = groupMembers?.find(e => e.id === user.id && (e.role === "owner" || e.role === "admin"))
+
 
     const handleDeletePost = async (postId: number) => {
         try {
@@ -65,6 +70,7 @@ const PostsList = ({
                                     </CardDescription>
                                 </div>
                             </div>
+                            {isAdmin &&
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" size="icon" className="w-8 h-8">
@@ -72,11 +78,14 @@ const PostsList = ({
                                         <span className="sr-only">Task options</span>
                                     </Button>
                                 </DropdownMenuTrigger>
+                                
                                 <DropdownMenuContent align="end">
                                     <DropdownMenuItem onClick={()=>handleEditPost(post)}>Edit</DropdownMenuItem>
                                     <DropdownMenuItem onClick={() => handleDeletePost(post.id)} className="text-destructive">Delete</DropdownMenuItem>
                                 </DropdownMenuContent>
+            
                             </DropdownMenu>
+                            }
                         </div>
                     </CardHeader>
                     <CardContent>
