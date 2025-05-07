@@ -12,6 +12,9 @@ import { CopyIcon, RefreshCcw } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { useForm } from "@inertiajs/react";
+import React from "react";
+import ReactDOM from "react-dom";
+import QRCode from "react-qr-code";
 // import { useNewJoinCode } from "@/features/workspaces/api/use-new-join-code"
 
 interface InviteModalProps {
@@ -59,6 +62,7 @@ const InviteModal = ({ open, setOpen, name, groupId }: InviteModalProps) => {
                         <pre className="font-bold text-muted-foreground text-4xl uppercase tracking-widest">
                             {code}
                         </pre>
+                        <QRCode value={window.location.origin+`/groups/invitation/${code}/join`} className="rounded-md" />
                         <Button variant={"ghost"} size={"sm"} onClick={handleCopy}>
                             Copy code
                             <CopyIcon className="ml-2 size-4" />
@@ -71,6 +75,8 @@ const InviteModal = ({ open, setOpen, name, groupId }: InviteModalProps) => {
                         onClick={handleNewCode}
                     >
                         Generate code
+
+
                         <RefreshCcw className="ml-2 size-4" />
                     </Button>
                     <DialogClose asChild>
