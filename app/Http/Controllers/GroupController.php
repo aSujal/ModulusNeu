@@ -6,10 +6,13 @@ use App\Http\Requests\CreateOrUpdateGroupRequest;
 use App\Http\Resources\GroupMemberResource;
 use App\Http\Resources\GroupResource;
 use App\Http\Resources\PostResource;
+use App\Http\Resources\TaskResource;
 use App\Models\Group;
 use App\Models\GroupMember;
 use App\Models\InvitationCode;
 use App\Models\Post;
+use App\Models\Task;
+use App\Models\TaskAnswer;
 use App\Support\InvitationCodeGenerator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Carbon;
@@ -35,6 +38,17 @@ class GroupController extends Controller
         }
 
         $data["group"]['posts'] = PostResource::collection($group->posts)->jsonSerialize();
+        $tasks = TaskResource::collection($group->tasks)->jsonSerialize();
+        if (Auth::user()->isAdminOrOwner($group->id)) {
+            $data["group"]['tasks'] = $tasks;
+        } else {
+            $data["group"]['tasks'] = collect($tasks)->map(function ($task) {
+                $task['responses'] = collect($task['responses'])->filter(function ($response): bool {
+                    return $response['user']['id'] === Auth::id();
+                })->values(); // reset keys
+                return $task;
+            })->values();
+        }
 
         return Inertia::render('Groups/Index', $data);
     }
@@ -116,7 +130,7 @@ class GroupController extends Controller
         if (!$invitationCode) {
             return $this->backWith('error', 'Invitation Code is invalid');
         }
-        
+
         if ($invitationCode->expires_at < now()) {
             $invitationCode->delete();
 

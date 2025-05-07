@@ -51,7 +51,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/task-answers/{answerId}', [TaskAnswerController::class, 'show'])->name('task.answers');
     Route::post('/task/{taskId}/task-answers/create', [TaskAnswerController::class, 'store'])->name('task.store-answer');
-    Route::put('/task-answers/update/{id}', [TaskAnswerController::class, 'update'])->name('task_answers.update');
+    Route::put('/task-answers/update/{groupId}', [TaskAnswerController::class, 'evaluate'])->name('task_answers.update');
     Route::delete('/task-answers/delete/{id}', [TaskAnswerController::class, 'destroy'])->name('task_answers.delete');
     Route::get('/tasks/files/{filenameWithoutExtension}', [TaskController::class, 'showFile']);
     

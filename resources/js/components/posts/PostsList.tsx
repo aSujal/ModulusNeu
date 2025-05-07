@@ -8,6 +8,7 @@ import { Button } from '../ui/button';
 import { router, usePage } from '@inertiajs/react';
 import { EditPostDialog } from './EditPostDialog';
 import { is } from 'date-fns/locale';
+import { toast } from 'sonner';
 
 interface PostListProps {
     group: Group;
@@ -32,10 +33,15 @@ const PostsList = ({
 
     const isAdmin = groupMembers?.find(e => e.id === user.id && (e.role === "owner" || e.role === "admin"))
 
-
     const handleDeletePost = async (postId: number) => {
         try {
-            await router.delete(`/post/${postId}/delete`);
+            await router.delete(`/post/${postId}/delete`,
+                {
+                    onSuccess: () => {
+                        toast.success("Post deleted successfully");
+                    }
+                }
+            );
         } catch (error) {
             console.error("Error deleting group:", error);
         }
@@ -71,20 +77,20 @@ const PostsList = ({
                                 </div>
                             </div>
                             {isAdmin &&
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="w-8 h-8">
-                                        <MoreHorizontal className="w-4 h-4" />
-                                        <span className="sr-only">Task options</span>
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                
-                                <DropdownMenuContent align="end">
-                                    <DropdownMenuItem onClick={()=>handleEditPost(post)}>Edit</DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => handleDeletePost(post.id)} className="text-destructive">Delete</DropdownMenuItem>
-                                </DropdownMenuContent>
-            
-                            </DropdownMenu>
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button variant="ghost" size="icon" className="w-8 h-8">
+                                            <MoreHorizontal className="w-4 h-4" />
+                                            <span className="sr-only">Task options</span>
+                                        </Button>
+                                    </DropdownMenuTrigger>
+
+                                    <DropdownMenuContent align="end">
+                                        <DropdownMenuItem onClick={() => handleEditPost(post)}>Edit</DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => handleDeletePost(post.id)} className="text-destructive">Delete</DropdownMenuItem>
+                                    </DropdownMenuContent>
+
+                                </DropdownMenu>
                             }
                         </div>
                     </CardHeader>

@@ -17,27 +17,12 @@ interface PostListProps {
 const TasksList = ({
     group
 }: PostListProps) => {
-    const [tasks, setTasks] = useState<Task[]>([]);
-    const [loading, setLoading] = useState(true);
     const user = usePage().props.auth.user;
-
-    useEffect(() => {
-        fetch(`/groups/${group.id}/tasks`)
-            .then(res => res.json())
-            .then((res) => {
-                setTasks(res.data);
-                setLoading(false);
-            })
-            .catch(() => setLoading(false));
-    }, [group.id]);
-
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center py-10">
-                <Loader className="animate-spin" />
-            </div>
-        );
-    }
+    const tasks = group.tasks;
+    console.clear()
+    console.log("tasks", tasks)
+    console.log("group", group)
+ 
 
     if (!tasks || tasks.length === 0) {
         return (

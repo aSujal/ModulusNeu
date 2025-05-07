@@ -14,9 +14,9 @@ class TaskAnswer extends Model
         'task_id',
         'user_id',
     ];
-    public function groupMember()
+    public function user()
      {
-        return $this->belongsTo(GroupMember::class);
+        return $this->belongsTo(User::class);
     }
 
     public function task()

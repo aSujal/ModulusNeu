@@ -12,6 +12,7 @@ export interface Group {
     image?: string | null;
     groupMembers: GroupMember[];
     posts: Post[]
+    tasks: Task[];
 };
 
 export interface GroupMember {
@@ -47,7 +48,7 @@ export interface TaskResponse {
     file: string | null,
     score: number,
     task_id: number,
-    user_id: number,
+    user: User,
     updated_at: Date,
     created_at: Date,
 }

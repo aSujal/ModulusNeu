@@ -29,7 +29,8 @@ class CreateOrUpdateTaskAnswerRequest extends FormRequest
         return [
             'name' => 'nullable|string|max:255',
             'file' => 'nullable|file',
-            'text' => 'required|string'
+            'text' => 'required|string',
+            'score' => 'nullable|numeric',
         ];
     }
 }

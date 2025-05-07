@@ -25,8 +25,6 @@ export default function Index({ group }: { group: Group; }) {
     setTaskListKey(prev => prev + 1);
   };
 
-  console.log("group", group)
-  console.log("groupMembers", groupMembers)
   const handleGroupNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGroupName(e.target.value);
   };

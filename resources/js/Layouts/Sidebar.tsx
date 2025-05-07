@@ -18,7 +18,6 @@ export default function AppSidebar({ active = false, className = "", ...props })
 
     const filteredGroups = groups.filter((group) => group.name.toLowerCase().includes(searchQuery.toLowerCase()))
 
-    console.log(groups)
     return (
         <Sidebar>
             <SidebarHeader className="px-3 py-2 border-b">
