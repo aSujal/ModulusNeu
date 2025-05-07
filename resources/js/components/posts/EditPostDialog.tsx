@@ -18,28 +18,27 @@ import { toast } from "sonner";
 
 interface EditPostDialogProps {
     post: { id: number; title: string; description: string };
-    onUpdated: () => void;
     open: boolean;
     groupId: number;
 }
 
-export function EditPostDialog({ post, onUpdated, open,groupId }: EditPostDialogProps) {
+export function EditPostDialog({ post, open, groupId }: EditPostDialogProps) {
     const [title, setTitle] = useState(post.title);
     const [content, setContent] = useState(post.description);
     const editorRef = React.useRef<Quill | null>(null);
-    
+
     useEffect(() => {
         setTitle(post.title);
         setContent(post.description);
     }, [post]);
+
     useEffect(() => {
         if (editorRef.current) {
             const quill = new Quill(document.createElement("div"));
-            const convertedDelta = quill.clipboard.convert({html:post.description});
+            const convertedDelta = quill.clipboard.convert({ html: post.description });
             editorRef.current.setContents(convertedDelta);
         }
-    }
-    , [editorRef.current]);
+    }, [editorRef.current]);
 
     const handleUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -49,11 +48,14 @@ export function EditPostDialog({ post, onUpdated, open,groupId }: EditPostDialog
                 title: title,
                 description: content,
             };
-            
+
             await router.put(`/post/${groupId}/update`, data, {
-                onSuccess: () => {
-                    toast.success("Post updated successfully!");
-                    onUpdated();
+                onSuccess: (data) => {
+                    if (data.props.notification.type === "success") {
+                        toast.success(data.props.notification.message ?? "Post updated successfully!");
+                    } else {
+                        toast.error(data.props.notification.message ?? "Failed to update post.");
+                    }
                 },
                 onError: () => {
                     toast.error("Failed to update post.");
@@ -63,7 +65,6 @@ export function EditPostDialog({ post, onUpdated, open,groupId }: EditPostDialog
             toast.error("An error occurred.");
         }
     };
-    
 
     const handleEditorChange = (value: {
         body: string;
@@ -75,7 +76,7 @@ export function EditPostDialog({ post, onUpdated, open,groupId }: EditPostDialog
     };
 
     return (
-        <Dialog open={open} onOpenChange={() => onUpdated()}>
+        <Dialog open={open}>
             <DialogContent className="sm:max-w-[700px]">
                 <form onSubmit={handleUpdate}>
                     <DialogHeader>
@@ -99,13 +100,13 @@ export function EditPostDialog({ post, onUpdated, open,groupId }: EditPostDialog
                             <RichTextEditor
                                 innerRef={editorRef}
                                 variant="update"
-                                onChange={handleEditorChange} 
+                                onChange={handleEditorChange}
                                 placeholder="Update your post content here..."
                             />
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button type="button" variant="outline" onClick={() => onUpdated()}>
+                        <Button type="button" variant="outline">
                             Cancel
                         </Button>
                         <Button type="submit" disabled={!title.trim() || !content.trim()}>
