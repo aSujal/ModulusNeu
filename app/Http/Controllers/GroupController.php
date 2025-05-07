@@ -124,25 +124,32 @@ class GroupController extends Controller
 
     public function joinGroup(string $code): RedirectResponse
     {
-        // $invitationCode = InvitationCode::whereCode($code)->with('group')->firstOrFail();
         $invitationCode = InvitationCode::whereCode($code)->with('group')->first();
 
         if (!$invitationCode) {
-            return $this->backWith('error', 'Invitation Code is invalid');
+            return request()->isMethod('post')
+                ? $this->backWith('error', 'Invitation Code is invalid')
+                : $this->redirectWith('error', 'Invitation Code is invalid', 'dashboard');
         }
 
         if ($invitationCode->expires_at < now()) {
             $invitationCode->delete();
 
-            return $this->backWith('error', 'Invitation Code is expired or invalid');
+            return request()->isMethod('post')
+                ? $this->backWith('error', 'Invitation Code is expired or invalid')
+                : $this->redirectWith('error', 'Invitation Code is expired or invalid', 'dashboard');
         }
 
         if ($invitationCode->group->groupMembers()->whereUserId(Auth::id())->exists()) {
-            return $this->backWith('error', 'Group already joined');
+            return request()->isMethod('post')
+                ? $this->backWith('error', 'Group already joined')
+                : $this->redirectWith('error', 'Group already joined', 'dashboard');
         }
 
         $invitationCode->group->groupMembers()->attach(Auth::id(), ['role' => 'user']);
 
-        return $this->backWith('success', 'Group joined successfully');
+        return request()->isMethod('post')
+            ? $this->backWith('success', 'Group joined successfully')
+            : $this->redirectWith('success', 'Group joined successfully', 'dashboard');
     }
 }

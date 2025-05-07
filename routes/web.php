@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/groups/{id}/invitation/create', [GroupController::class, 'createInvitationCode'])->name('create.group.invitation-code');
     Route::post('/groups/invitation/{code}/join', [GroupController::class, 'joinGroup'])->name('create.joinGroup');
+    Route::get('/groups/invitation/{code}/join', [GroupController::class, 'joinGroup'])->middleware('throttle:10,1')->name('create.joinGroup');
 
     Route::get('/groups/{groupId}/task/create', [TaskController::class, 'create'])->name('group.create-task');
     Route::post('/groups/{groupId}/task/create', [TaskController::class, 'store'])->name('group.store-task');
