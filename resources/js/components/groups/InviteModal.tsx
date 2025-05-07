@@ -70,7 +70,7 @@ const InviteModal = ({ open, setOpen, name, groupId }: InviteModalProps) => {
                         variant={"outline"}
                         onClick={handleNewCode}
                     >
-                        Get or Create code
+                        Generate code
                         <RefreshCcw className="ml-2 size-4" />
                     </Button>
                     <DialogClose asChild>

@@ -33,7 +33,7 @@ export default function TaskResponse({
     groupId,
     isAdmin = false
 }: TaskResponseProps) {
-    const [ConfirmDialog, confirm] = useConfirm("Are you sure?", "This will permanently delete the channel.");
+    const [ConfirmDialog, confirm] = useConfirm("Are you sure?", "This will permanently delete the response.");
 
     const [scores, setScores] = useState<{ [responseId: number]: number }>(() => {
         const initialScores: { [id: number]: number } = {};

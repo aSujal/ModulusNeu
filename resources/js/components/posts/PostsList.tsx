@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { formatDistanceToNow, } from "date-fns";
 import { MoreHorizontal } from 'lucide-react';
-import { Group } from '@/types';
+import { Group, Post } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from '../ui/button';
 import { router, usePage } from '@inertiajs/react';
 import { EditPostDialog } from './EditPostDialog';
-import { is } from 'date-fns/locale';
 import { toast } from 'sonner';
+import { useConfirm } from '@/hooks/use-confirm';
 
 interface PostListProps {
     group: Group;
@@ -17,6 +17,10 @@ interface PostListProps {
 const PostsList = ({
     group
 }: PostListProps) => {
+    const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+    const [ConfirmDialog, confirm] = useConfirm("Are you sure?", "This will permanently delete the post.");
+
     const sortedPosts = [...(group?.posts || [])].sort((a, b) => {
         return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
@@ -34,6 +38,8 @@ const PostsList = ({
     const isAdmin = groupMembers?.find(e => e.id === user.id && (e.role === "owner" || e.role === "admin"))
 
     const handleDeletePost = async (postId: number) => {
+        const confirmed = await confirm();
+        if (!confirmed) return;
         try {
             await router.delete(`/post/${postId}/delete`,
                 {
@@ -47,20 +53,14 @@ const PostsList = ({
         }
     };
 
-    const [selectedPost, setSelectedPost] = useState<{ id: number; title: string; description: string } | null>(null);
-    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-    const handleEditPost = (post: { id: number; title: string; description: string }) => {
+    const handleEditPost = (post: Post) => {
         setSelectedPost(post);
         setIsEditDialogOpen(true);
     };
 
-    const handlePostUpdated = () => {
-        // Refresh the posts list or handle updates
-        setIsEditDialogOpen(false);
-    };
-
     return (
         <div className='space-y-4'>
+            <ConfirmDialog />
             {sortedPosts.map((post) => (
                 <Card key={post.id}>
                     <CardHeader className='pb-2'>
@@ -89,7 +89,6 @@ const PostsList = ({
                                         <DropdownMenuItem onClick={() => handleEditPost(post)}>Edit</DropdownMenuItem>
                                         <DropdownMenuItem onClick={() => handleDeletePost(post.id)} className="text-destructive">Delete</DropdownMenuItem>
                                     </DropdownMenuContent>
-
                                 </DropdownMenu>
                             }
                         </div>
@@ -100,14 +99,12 @@ const PostsList = ({
                 </Card>
             ))}
 
-            {/* Render a single EditPostDialog */}
             {selectedPost && (
                 <EditPostDialog
                     post={selectedPost}
                     open={isEditDialogOpen}
                     groupId={group.id}
-                    // onClose={() => setIsEditDialogOpen(false)}
-                    onUpdated={handlePostUpdated}
+                    onClose={() => setIsEditDialogOpen(false)}
                 />
             )}
         </div>

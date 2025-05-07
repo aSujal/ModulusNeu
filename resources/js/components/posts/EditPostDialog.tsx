@@ -20,9 +20,10 @@ interface EditPostDialogProps {
     post: { id: number; title: string; description: string };
     open: boolean;
     groupId: number;
+    onClose?: () => void;
 }
 
-export function EditPostDialog({ post, open, groupId }: EditPostDialogProps) {
+export function EditPostDialog({ post, open, groupId, onClose }: EditPostDialogProps) {
     const [title, setTitle] = useState(post.title);
     const [content, setContent] = useState(post.description);
     const editorRef = React.useRef<Quill | null>(null);
@@ -53,6 +54,7 @@ export function EditPostDialog({ post, open, groupId }: EditPostDialogProps) {
                 onSuccess: (data) => {
                     if (data.props.notification.type === "success") {
                         toast.success(data.props.notification.message ?? "Post updated successfully!");
+                        onClose?.();
                     } else {
                         toast.error(data.props.notification.message ?? "Failed to update post.");
                     }
@@ -76,7 +78,7 @@ export function EditPostDialog({ post, open, groupId }: EditPostDialogProps) {
     };
 
     return (
-        <Dialog open={open}>
+        <Dialog open={open} onOpenChange={onClose}>
             <DialogContent className="sm:max-w-[700px]">
                 <form onSubmit={handleUpdate}>
                     <DialogHeader>
@@ -106,7 +108,7 @@ export function EditPostDialog({ post, open, groupId }: EditPostDialogProps) {
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button type="button" variant="outline">
+                        <Button type="button" variant="outline" onClick={onClose}>
                             Cancel
                         </Button>
                         <Button type="submit" disabled={!title.trim() || !content.trim()}>

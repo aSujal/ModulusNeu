@@ -8,7 +8,11 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '../ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ViewTaskDialog } from './ViewTask';
-import { usePage } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
+import { toast } from 'sonner';
+import { EditTaskDialog } from './EditTaskDialog';
+import { useConfirm } from '@/hooks/use-confirm';
+import { Badge } from '../ui/badge';
 
 interface PostListProps {
     group: Group;
@@ -17,12 +21,12 @@ interface PostListProps {
 const TasksList = ({
     group
 }: PostListProps) => {
+    const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+    const [ConfirmDialog, confirm] = useConfirm("Are you sure?", "This will permanently delete the task.");
+
     const user = usePage().props.auth.user;
     const tasks = group.tasks;
-    console.clear()
-    console.log("tasks", tasks)
-    console.log("group", group)
- 
 
     if (!tasks || tasks.length === 0) {
         return (
@@ -38,9 +42,35 @@ const TasksList = ({
     );
 
     const isAdmin = group.groupMembers?.some(e => e.id === user.id && (e.role === "owner" || e.role === "admin"))
+    // const member = group.groupMembers?.find(e => e.id === user.id);
+    const handleDeleteTask = async (taskId: number) => {
+        const confirmed = await confirm();
+        if (!confirmed) return;
+        try {
+            await router.delete(`/task/${taskId}/delete`,
+                {
+                    onSuccess: (data) => {
+                        if (data.props.notification.type === "success") {
+                            toast.success(data.props.notification.message ?? "Task deleted successfully!");
+                        } else {
+                            toast.error(data.props.notification.message ?? "Failed to delete task.");
+                        }
+                    }
+                }
+            );
+        } catch (error) {
+            console.error("Error deleting group:", error);
+        }
+    };
+
+    const handleEditTask = (task: Task) => {
+        setSelectedTask(task);
+        setIsEditDialogOpen(true);
+    };
 
     return (
         <div className='space-y-4'>
+            <ConfirmDialog />
             {sortedTasks?.map((task) => (
                 <Card key={task.id} className="shadow-lg hover:shadow-xl mb-6 rounded-lg transition">
                     <CardHeader className="pb-2">
@@ -65,8 +95,8 @@ const TasksList = ({
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                                    <DropdownMenuItem className="text-destructive">Delete</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => handleEditTask(task)}>Edit</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => handleDeleteTask(task.id)} className="text-destructive">Delete</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>
@@ -96,17 +126,49 @@ const TasksList = ({
                             </div>
                         )}
                     </CardContent>
-
                     <CardFooter className="pt-4 border-t">
                         <div className='flex justify-between items-center w-full'>
-                            <span><strong>Score: </strong> 0/{task.max_score}</span>
+                            <div className="flex items-center gap-2">
+                                {(() => {
+                                    const userResponse = task.responses.find((response) => response.user.id === user.id);
+
+                                    if (!userResponse) {
+                                        return (
+                                            <Badge variant="destructive" className="px-2 py-1">
+                                                Not submitted
+                                            </Badge>
+                                        );
+                                    } else if (userResponse.score !== undefined && userResponse.score !== null) {
+                                        return (
+                                            <Badge variant="outline" className="px-2 py-1 font-medium">
+                                                Score: {userResponse.score}/{task.max_score}
+                                            </Badge>
+                                        );
+                                    } else {
+                                        return (
+                                            <Badge variant="secondary" className="px-2 py-1">
+                                                Not graded yet
+                                            </Badge>
+                                        );
+                                    }
+                                })()}
+                            </div>
                             <ViewTaskDialog groupId={group.id} task={task} isAdmin={isAdmin}>
                                 <Button>View</Button>
                             </ViewTaskDialog>
                         </div>
                     </CardFooter>
                 </Card>
+
             ))}
+            {selectedTask && (
+                <EditTaskDialog
+                    task={selectedTask}
+                    open={isEditDialogOpen}
+                    groupId={group.id}
+                    onClose={() => setIsEditDialogOpen(false)}
+                />
+            )}
         </div>
     );
 

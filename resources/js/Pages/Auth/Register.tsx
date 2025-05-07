@@ -1,6 +1,7 @@
 import InputError from '@/components/InputError';
 import InputLabel from '@/components/InputLabel';
 import PrimaryButton from '@/components/PrimaryButton';
+import TextInput from '@/components/TextInput';
 import { Input } from '@/components/ui/input';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
@@ -28,7 +29,7 @@ export default function Register() {
             <form onSubmit={submit}>
                 <div>
                     <InputLabel htmlFor="full_name" value="Full Name" />
-                    <Input
+                    <TextInput
                         id="full_name"
                         name="full_name"
                         value={data.full_name}
@@ -44,7 +45,7 @@ export default function Register() {
                 <div className="mt-4">
                     <InputLabel htmlFor="email" value="Email" />
 
-                    <Input
+                    <TextInput
                         id="email"
                         type="email"
                         name="email"
@@ -61,7 +62,7 @@ export default function Register() {
                 <div className="mt-4">
                     <InputLabel htmlFor="password" value="Password" />
 
-                    <Input
+                    <TextInput
                         id="password"
                         type="password"
                         name="password"
@@ -81,7 +82,7 @@ export default function Register() {
                         value="Confirm Password"
                     />
 
-                    <Input
+                    <TextInput
                         id="password_confirmation"
                         type="password"
                         name="password_confirmation"

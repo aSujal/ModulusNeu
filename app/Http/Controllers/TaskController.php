@@ -75,22 +75,22 @@ class TaskController extends Controller
         return TaskResource::collection($group->tasks);
     }
 
-    public function update(int $id, CreateOrUpdateTaskRequest $request): RedirectResponse
+    public function update(int $groupId, CreateOrUpdateTaskRequest $request): RedirectResponse
     {
-        $task = Task::findOrFail($id);
-        if (Auth::user()->isAdminOrOwner($task->group_id)) {
-            $validated = $request->validated();
-            $task->update([
-                "title" => $validated["title"],
-                "file" => $validated["file"],
-                "text" => $validated["text"],
-                "due_date" => $validated['due_date'],
-                "max_score" => $validated["max_score"],
-            ]);
-
-            return $this->backWith('success', 'Task updated successfully!');
+        $task = Task::findOrFail($request["id"]);
+        if ($request->hasFile("file")) {
+            $file = Storage::disk("local")->put("tasks", $request->file("file"));
         }
-        return $this->backWith('error', 'You are not an Admin or Owner of this group.');
+        $validated = $request->validated();
+        $task->update([
+            "title" => $validated["title"],
+            "file" => $file ?? null,
+            "text" => $validated["text"],
+            "due_date" => $validated['due_date'],
+            "max_score" => $validated["max_score"],
+        ]);
+
+        return $this->backWith('success', 'Task updated successfully!');
     }
     public function destroy($taskId): RedirectResponse
     {

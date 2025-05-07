@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Group;
 use App\Models\GroupMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,10 +10,14 @@ use Inertia\Inertia;
 class GroupMemberController extends Controller
 {
     public function removeUserFromGroup($groupId,$memberId){
+        
         $currentUser = Auth::user();
         $groupMember = GroupMember::where('group_id', $groupId)
                                 ->where('user_id', $memberId)
                                 ->first();
+        if($groupMember->role == 'owner') {
+            return $this->backWith('error','You cannot remove owner from the group');
+        }
 
         if (!$groupMember) {
             return $this->backWith('error','Group Member not found');

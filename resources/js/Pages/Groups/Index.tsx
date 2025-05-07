@@ -7,52 +7,35 @@ import PostsList from '@/components/posts/PostsList';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import InviteModal from '@/components/groups/InviteModal';
-import { FileText, PlusCircle, Users } from 'lucide-react';
+import { FileText, Pen, PlusCircle, Users } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { GroupMembers } from '@/components/groups/GroupMembers';
 import { CreatePostDialog } from '@/components/posts/CreatePost';
 import { CreateTaskDialog } from '@/components/tasks/CreateTask';
 import TasksList from '@/components/tasks/TasksList';
+import PreferencesModal from '@/components/groups/PreferencesModal';
 
 export default function Index({ group }: { group: Group; }) {
-  const [groupName, setGroupName] = useState(group.name);
   const [inviteOpen, setInviteOpen] = useState(false);
-  const groupMembers = group?.groupMembers ?? [];
+  const [preferencesOpen, setPreferencesOpen] = useState(false);
   const [taskListKey, setTaskListKey] = useState(0);
   const user = usePage().props.auth.user;
+  console.log(group);
+  const groupMembers = group?.groupMembers ?? [];
 
   const handleTaskCreated = () => {
     setTaskListKey(prev => prev + 1);
   };
 
-  const handleGroupNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setGroupName(e.target.value);
-  };
-
-  const handleGroupNameSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await router.put(`/groups/${group.id}`, { name: groupName });
-    } catch (error) {
-      console.error("Error updating group name:", error);
-    }
-  };
-
-  const handleDeleteGroup = async () => {
-    const confirmDelete = confirm("Are you sure you want to delete this group? This action cannot be undone.");
-    if (!confirmDelete) return;
-    try {
-      await router.delete(`/groups/${group.id}`);
-    } catch (error) {
-      console.error("Error deleting group:", error);
-    }
+  const handleOpenPreferences = () => {
+    setPreferencesOpen(true);
   };
 
   const isAdmin = groupMembers?.find(e => e.id === user.id && (e.role === "owner" || e.role === "admin"))
 
   return (
     <AuthenticatedLayout>
-      <Head title={`Group: ${groupName}`} />
+      <Head title={`Group: ${group.name}`} />
       <header className="border-b">
         <div className="flex items-center px-4 sm:px-6 h-16">
           <div className="flex items-center gap-2">
@@ -67,14 +50,27 @@ export default function Index({ group }: { group: Group; }) {
           </div>
           <div className="flex items-center gap-2 ml-auto">
             <InviteModal name={group.name} open={inviteOpen} setOpen={setInviteOpen} groupId={group.id} />
-            <Button variant="outline" size="sm" onClick={() => setInviteOpen(true)}>
-              <Users className="mr-2 w-4 h-4" />
-              Invite Members
-            </Button>
+            <PreferencesModal groupId={group.id} initialValue={group.name} open={preferencesOpen} setOpen={() => setPreferencesOpen(false)} />
+            {isAdmin && (
+              <>
+                <Button variant="outline" size="sm" onClick={() => setInviteOpen(true)}>
+                  <Users className="w-4 h-4" />
+                  Invite Members
+                </Button>
+                <Button variant="outline" size="sm" onClick={handleOpenPreferences}>
+                  <Pen className="w-4 h-4" />
+                  Preferences
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </header>
-      <div className='relative flex-1 items-start md:gap-6 md:grid md:grid-cols-[1fr_250px] lg:grid-cols-[1fr_300px] px-4 sm:px-6 py-6'>
+      <div
+        className={`relative flex-1 items-start px-4 sm:px-6 py-6 ${isAdmin && groupMembers.length > 0
+            ? 'md:gap-6 md:grid md:grid-cols-[1fr_250px] lg:grid-cols-[1fr_300px]'
+            : ''
+          }`}>
         <Tabs defaultValue="posts" className="w-full">
           <div className="flex justify-between items-center">
             <TabsList>

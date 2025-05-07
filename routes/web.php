@@ -46,8 +46,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/groups/{groupId}/task/{taskId}/update', [TaskController::class, 'update'])->name('group.update-task');
     Route::get('/groups/{groupId}/tasks', [TaskController::class, 'getTasksForGroup'])->name('groups.tasks');
 
-    // Route::delete('/groups/{groupId}/task/{taskId}/delete', [TaskController::class, 'destroy'])->name('create.group.delete-task');
+    Route::delete('/task/{taskId}/delete', [TaskController::class, 'destroy'])->name('create.group.delete-task');
     Route::get('/task/{taskId}', [TaskController::class, 'index'])->name('group.task');
+    Route::put('/task/{groupId}/update/', [TaskController::class, 'update'])->name('group.task');
 
     Route::get('/task-answers/{answerId}', [TaskAnswerController::class, 'show'])->name('task.answers');
     Route::post('/task/{taskId}/task-answers/create', [TaskAnswerController::class, 'store'])->name('task.store-answer');

@@ -143,7 +143,7 @@ export function CreateTaskDialog({ children, groupId, onCreated }: CreateTaskDia
                         </div>
                         <div className="gap-2 grid">
                             <Label htmlFor="score">Max Score</Label>
-                            <Slider onChange={(e) => setMaxScore(e.target.value)} defaultValue={[maxScore]} max={100} step={1} />
+                            <Slider onValueChange={(value) => setMaxScore(value[0])} defaultValue={[maxScore]} max={100} step={1} />
                             <span>{maxScore}</span>
                         </div>
 

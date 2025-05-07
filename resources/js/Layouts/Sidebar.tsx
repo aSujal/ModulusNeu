@@ -1,4 +1,4 @@
-import { Home, LogOut, Plus, Search, Users } from "lucide-react";
+import { Box, Home, LogOut, Plus, Search, Users } from "lucide-react";
 import { usePage } from "@inertiajs/react";
 import { Group } from "@/types";
 import { useEffect, useState } from "react";
@@ -8,9 +8,11 @@ import CreateGroupModal from "@/components/groups/CreateGroupModal";
 import { Button } from "@/components/ui/button";
 import { UserNav } from "@/components/user/UserNav";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import JoinGroupModal from "@/components/groups/JoinGroupModal";
 
 export default function AppSidebar({ active = false, className = "", ...props }) {
     const groups = usePage().props.groups as Group[] || [];
+    const [showJoinModal, setShowJoinModal] = useState(false);
     const user = usePage().props.auth.user;
     const { url } = usePage();
     const [searchQuery, setSearchQuery] = useState("")
@@ -67,6 +69,11 @@ export default function AppSidebar({ active = false, className = "", ...props })
                     <Button variant="outline" className="justify-start w-full" onClick={() => setShowModal(true)}>
                         <Plus className="mr-2 w-4 h-4" />
                         Create New Group
+                    </Button>
+                    <JoinGroupModal open={showJoinModal} onClose={() => setShowJoinModal(false)} />
+                    <Button variant={"outline"} className="justify-start w-full" onClick={() => setShowJoinModal(true)}>
+                        <Box className="mr-2 w-4 h-4" />
+                        Join Group
                     </Button>
                     <UserNav />
                 </div>

@@ -14,9 +14,14 @@ export default function JoinGroupModal({ open, onClose }: JoinGroupModalProps) {
     const { post, processing, reset } = useForm();
 
     const handleComplete = (code: string) => {
-        post(`groups/invitation/${code}/join`, {
-            onSuccess: () => {
-                toast.success("Joined group successfully!");
+        post(`/groups/invitation/${code}/join`, {
+            onSuccess: (data) => {
+                if(data.props.notification.type === "success") {
+                    toast.success(data.props.notification.message ?? "Joined group successfully!");
+                    onClose();
+                } else {
+                    toast.error(data.props.notification.message ?? "Failed to join group.");
+                }
             },
             onError: () => {
                 toast.error("Invalid or expired code.");
