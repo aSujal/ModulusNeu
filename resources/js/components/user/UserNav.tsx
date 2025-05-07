@@ -14,7 +14,7 @@ import { LogOut, Settings, User } from "lucide-react"
 
 export function UserNav() {
     const user = usePage().props.auth.user;
-
+    console.log(user)
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -27,7 +27,7 @@ export function UserNav() {
                             {user.full_name.charAt(0)}
                         </AvatarFallback>
                     </Avatar>
-                    <span className="hidden lg:inline-flex ml-2">
+                    <span className="lg:inline-flex ml-2">
                         {user.full_name}
                     </span>
                 </Button>

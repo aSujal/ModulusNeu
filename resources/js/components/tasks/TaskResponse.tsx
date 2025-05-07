@@ -194,16 +194,14 @@ export default function TaskResponse({
                                         )}
 
                                         {/* Delete button */}
-                                        {isAdmin && (
-                                            <Button
-                                                size="icon"
-                                                variant="ghost"
-                                                className="w-8 h-8 text-red-500"
-                                                onClick={() => handleTaskDelete(response.id)}
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </Button>
-                                        )}
+                                        <Button
+                                            size="icon"
+                                            variant="ghost"
+                                            className="w-8 h-8 text-red-500"
+                                            onClick={() => handleTaskDelete(response.id)}
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </Button>
                                     </div>
                                 </div>
 

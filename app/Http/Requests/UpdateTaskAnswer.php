@@ -16,7 +16,7 @@ class UpdateTaskAnswer extends FormRequest
     public function rules(): array
     {
         return [
-            "name" => "required",
+            "full_name" => "required",
             "file" => 'file',
             "text" => 'string'
         ];
