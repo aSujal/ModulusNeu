@@ -39,10 +39,12 @@ export function CreateTaskDialog({ children, groupId, onCreated }: CreateTaskDia
     const [maxScore, setMaxScore] = useState(100)
     const [files, setFiles] = useState<File[]>([])
     const [dueDate, setDueDate] = useState<Date | undefined>(undefined);
-    
-    function toMySQLDateTime(date: Date): string {
-        return date.toISOString().slice(0, 19).replace('T', ' ');
+
+    function toMySQLDateTimeLocal(date: Date): string {
+        const pad = (n: number) => n.toString().padStart(2, '0')
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
     }
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -52,7 +54,7 @@ export function CreateTaskDialog({ children, groupId, onCreated }: CreateTaskDia
                 file: files[0] ?? null,
                 text: text,
                 max_score: maxScore,
-                due_date: dueDate ? toMySQLDateTime(dueDate) : null,
+                due_date: dueDate ? toMySQLDateTimeLocal(dueDate) : null,
                 group_id: groupId
             }, {
                 onSuccess: () => {

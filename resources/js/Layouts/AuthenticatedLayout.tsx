@@ -9,7 +9,7 @@ export default function Authenticated({
     children,
 }: PropsWithChildren<{ header?: ReactNode }>) {
     const user = usePage().props.auth.user;
-    // const notification = usePage().props.notification;
+    const notification = usePage().props.notification;
     // useEffect(() => {
     //     console.clear();
     //     console.log(notification);
