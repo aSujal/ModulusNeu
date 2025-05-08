@@ -6,11 +6,23 @@ import CreateGroupModal from "@/components/groups/CreateGroupModal";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { GroupCard } from "@/components/groups/group-card";
+import { toast } from "sonner";
 
 const Index = ({ groups }: { groups: Group[] }) => {
     const [showModal, setShowModal] = useState(false);
     const [currentGroup, setCurrentGroup] = useState<Group | null>(null);
     const { url } = usePage();
+    const { notification } = usePage().props;
+
+    useEffect(() => {
+        if(notification) {
+            if(notification.type === 'error') {
+                toast.error(notification?.message);
+            } else if(notification.type === 'success') {
+                toast.success(notification?.message);
+            }
+        }
+    }, []);
 
     const idFromUrl = (): number => {
         const segments = url.split('/');
