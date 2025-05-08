@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { router } from '@inertiajs/react';
 import { Group, GroupMember } from '@/types';
 import PostsList from '@/components/posts/PostsList';
@@ -20,8 +20,19 @@ export default function Index({ group }: { group: Group; }) {
   const [preferencesOpen, setPreferencesOpen] = useState(false);
   const [taskListKey, setTaskListKey] = useState(0);
   const user = usePage().props.auth.user;
+  const notification = usePage().props.notification;
   console.log(group);
   const groupMembers = group?.groupMembers ?? [];
+
+  useEffect(() => {
+    if (notification) {
+      if (notification.type === 'error') {
+        toast.error(notification?.message);
+      } else if (notification.type === 'success') {
+        toast.success(notification?.message);
+      }
+    }
+  }, []);
 
   const handleTaskCreated = () => {
     setTaskListKey(prev => prev + 1);
@@ -31,7 +42,7 @@ export default function Index({ group }: { group: Group; }) {
     setPreferencesOpen(true);
   };
 
-  const isAdmin = groupMembers?.find(e => e.id === user.id && (e.role === "owner" || e.role === "admin"))
+  const isAdmin = groupMembers?.some(e => e.id === user.id && (e.role === "owner" || e.role === "admin"));
 
   return (
     <AuthenticatedLayout>
@@ -67,10 +78,7 @@ export default function Index({ group }: { group: Group; }) {
         </div>
       </header>
       <div
-        className={`relative flex-1 items-start px-4 sm:px-6 py-6 ${isAdmin && groupMembers.length > 0
-            ? 'md:gap-6 md:grid md:grid-cols-[1fr_250px] lg:grid-cols-[1fr_300px]'
-            : ''
-          }`}>
+        className={`relative flex-1 items-start px-4 sm:px-6 py-6 ${isAdmin ? 'md:gap-6 md:grid md:grid-cols-[1fr_250px] lg:grid-cols-[1fr_300px]' : ''}`}>
         <Tabs defaultValue="posts" className="w-full">
           <div className="flex justify-between items-center">
             <TabsList>
@@ -101,7 +109,7 @@ export default function Index({ group }: { group: Group; }) {
             <TasksList key={taskListKey} group={group} />
           </TabsContent>
         </Tabs>
-        {groupMembers.length > 0 && (
+        {isAdmin && groupMembers.length > 0 && (
           <aside className="hidden md:block top-16 sticky h-[calc(100vh-8rem)]">
             <GroupMembers group={group} />
           </aside >

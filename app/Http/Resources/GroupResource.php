@@ -17,6 +17,7 @@ class GroupResource extends JsonResource
             "id"=>$this->id,
             'name' => $this->name,
             'posts' => PostResource::collection($this->posts)->jsonSerialize(),
+            'groupMembers' => GroupMemberResource::collection($this->groupMembers)->jsonSerialize(),
             'group_members_count' => $this->group_members_count,
         ];
     }

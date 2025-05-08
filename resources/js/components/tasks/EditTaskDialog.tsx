@@ -37,11 +37,21 @@ export function EditTaskDialog({ task, open, groupId, onClose }: EditTaskDialogP
     const [maxScore, setMaxScore] = useState(100)
     const [files, setFiles] = useState<File[]>([])
     const [dueDate, setDueDate] = useState<Date | undefined>(task.due_date ? new Date(task.due_date) : undefined);
+    const [dueTime, setDueTime] = useState<string>("12:00")
 
     const editorRef = React.useRef<Quill | null>(null);
 
-    function toMySQLDateTime(date: Date): string {
-        return date.toISOString().slice(0, 19).replace('T', ' ');
+
+    function toMySQLDateTimeLocal(date: Date): string {
+        const pad = (n: number) => n.toString().padStart(2, '0')
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
+    }
+
+    function combineDateAndTime(date: Date, time: string): Date {
+        const [hours, minutes] = time.split(":").map(Number)
+        const combined = new Date(date)
+        combined.setHours(hours, minutes, 0, 0)
+        return combined
     }
 
     useEffect(() => {
@@ -66,7 +76,7 @@ export function EditTaskDialog({ task, open, groupId, onClose }: EditTaskDialogP
                 text: content,
                 file: files[0] ?? null,
                 max_score: maxScore,
-                due_date: dueDate ? toMySQLDateTime(dueDate) : null,
+                due_date: dueDate ? toMySQLDateTimeLocal(combineDateAndTime(dueDate, dueTime)) : null,
                 group_id: groupId
             };
 
@@ -108,7 +118,7 @@ export function EditTaskDialog({ task, open, groupId, onClose }: EditTaskDialogP
                     <div className="gap-4 grid py-4">
                         {/* Add a scrollable container */}
                         <div className="gap-4 grid py-4 max-h-[70vh] overflow-y-auto">
-                            <div className="gap-4 grid grid-cols-1 sm:grid-cols-2">
+                            <div className="gap-4 grid grid-cols-1 sm:grid-cols-3">
                                 <div className="gap-2 grid">
                                     <Label htmlFor="title">Title</Label>
                                     <Input
@@ -139,11 +149,21 @@ export function EditTaskDialog({ task, open, groupId, onClose }: EditTaskDialogP
                                                 mode="single"
                                                 selected={dueDate}
                                                 onSelect={setDueDate}
-                                                disabled={(date) => date < new Date()}
                                                 initialFocus
+
                                             />
                                         </PopoverContent>
                                     </Popover>
+                                </div>
+                                <div className="gap-2 grid">
+                                    <Label htmlFor="due_time">Time</Label>
+                                    <Input
+                                        id="due_time"
+                                        type="time"
+                                        value={dueTime}
+                                        onChange={(e) => setDueTime(e.target.value)}
+                                        required
+                                    />
                                 </div>
                             </div>
 
