@@ -50,7 +50,7 @@ export default function Index({ group }: { group: Group; }) {
           </div>
           <div className="flex items-center gap-2 ml-auto">
             <InviteModal name={group.name} open={inviteOpen} setOpen={setInviteOpen} groupId={group.id} />
-            <PreferencesModal groupId={group.id} initialValue={group.name} open={preferencesOpen} setOpen={() => setPreferencesOpen(false)} />
+            <PreferencesModal group={group} initialValue={group.name} open={preferencesOpen} setOpen={() => setPreferencesOpen(false)} />
             {isAdmin && (
               <>
                 <Button variant="outline" size="sm" onClick={() => setInviteOpen(true)}>

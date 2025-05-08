@@ -11,8 +11,10 @@ class DashboardController extends Controller
 {
     public function index(): \Inertia\Response
     {
-        $groups = Group::whereUserId(Auth::id())->get();
+        $groups = Group::with('posts')->withCount('groupMembers')->whereUserId(Auth::id())->get();
 
-        return Inertia::render('Dashboard/Index');
+        return Inertia::render('Dashboard/Index', [
+            'groups' => GroupResource::collection($groups)->jsonSerialize(),
+        ]);
     }
 }

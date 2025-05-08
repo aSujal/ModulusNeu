@@ -12,17 +12,18 @@ import { TrashIcon, Pencil } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { toast } from 'sonner';
-import { router } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { useConfirm } from './useConfirm';
+import { Group } from '@/types';
 
 interface PreferencesModalProps {
     open: boolean;
     setOpen: (open: boolean) => void;
     initialValue: string;
-    groupId: number;
+    group: Group;
 }
 
-const PreferencesModal = ({ open, setOpen, initialValue, groupId }: PreferencesModalProps) => {
+const PreferencesModal = ({ open, setOpen, initialValue, group }: PreferencesModalProps) => {
     const [groupName, setGroupName] = React.useState(initialValue);
     const [isEditing, setIsEditing] = React.useState(false);
     const [ConfirmDialog, confirm] = useConfirm("Are you sure?", "This action is irreversible");
@@ -34,7 +35,7 @@ const PreferencesModal = ({ open, setOpen, initialValue, groupId }: PreferencesM
     const handleGroupNameSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await router.put(`/groups/${groupId}`, { name: groupName });
+            await router.put(`/groups/${group.id}`, { name: groupName });
             toast.success("Group name updated successfully!");
             setIsEditing(false);
         } catch (error) {
@@ -48,7 +49,7 @@ const PreferencesModal = ({ open, setOpen, initialValue, groupId }: PreferencesM
         if (!confirmDelete) return;
 
         try {
-            await router.delete(`/groups/${groupId}`);
+            await router.delete(`/groups/${group.id}`);
             toast.success("Group deleted successfully!");
             setOpen(false);
         } catch (error) {
@@ -56,7 +57,8 @@ const PreferencesModal = ({ open, setOpen, initialValue, groupId }: PreferencesM
             toast.error("Failed to delete group");
         }
     };
-
+    const user = usePage().props.auth.user;
+    const isOwner = group.groupMembers?.find(e => e.id === user.id && (e.role === "owner"))
     return (
         <>
             <ConfirmDialog />
@@ -102,18 +104,19 @@ const PreferencesModal = ({ open, setOpen, initialValue, groupId }: PreferencesM
                             </form>
                         )}
 
-                        {/* Delete Group */}
-                        <button
-                            onClick={handleDeleteGroup}
-                            type="button"
-                            className="flex items-center gap-2 hover:bg-black/10 px-5 py-4 border rounded-lg text-rose-600 transition cursor-pointer"
-                        >
-                            <TrashIcon className="w-5 h-5" />
-                            <p>Delete group</p>
-                        </button>
+                        {isOwner &&
+                            < button
+                                onClick={handleDeleteGroup}
+                                type="button"
+                                className="flex items-center gap-2 hover:bg-black/10 px-5 py-4 border rounded-lg text-rose-600 transition cursor-pointer"
+                            >
+                                <TrashIcon className="w-5 h-5" />
+                                <p>Delete group</p>
+                            </button>
+                        }
                     </div>
                 </DialogContent>
-            </Dialog>
+            </Dialog >
         </>
     );
 };

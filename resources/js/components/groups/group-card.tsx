@@ -13,7 +13,7 @@ interface GroupCardProps {
 
 export function GroupCard({ group }: GroupCardProps) {
     const [loading, setLoading] = useState(false);
-
+    console.log(group)
     const handleSwitch = (group: Group) => {
         setLoading(true);
         console.log(group)
@@ -36,7 +36,7 @@ export function GroupCard({ group }: GroupCardProps) {
             <CardFooter className="flex justify-between items-center bg-muted/20 px-6 py-3 border-t">
                 <div className="flex items-center text-muted-foreground text-sm">
                     <Users className="mr-1 w-4 h-4" />
-                    <span>{group.groupMembers?.length} members</span>
+                    <span>{group.group_members_count} members</span>
                 </div>
                 <div className="flex items-center text-muted-foreground text-sm">
                     <Clock className="mr-1 w-4 h-4" />

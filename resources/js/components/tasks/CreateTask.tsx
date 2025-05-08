@@ -23,7 +23,7 @@ import { Slider } from "@/components/ui/slider"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { cn } from "@/lib/utils"
 import { CalendarIcon } from "lucide-react"
-import { format } from "date-fns"
+import { format, toDate } from "date-fns"
 import { Calendar } from "../ui/calendar"
 
 interface CreateTaskDialogProps {
@@ -52,7 +52,7 @@ export function CreateTaskDialog({ children, groupId, onCreated }: CreateTaskDia
                 file: files[0] ?? null,
                 text: text,
                 max_score: maxScore,
-                due_date: dueDate ? toMySQLDateTime(dueDate) : null,
+                due_date: dueDate ? toDate(dueDate) : null,
                 group_id: groupId
             }, {
                 onSuccess: () => {

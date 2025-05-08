@@ -13,6 +13,7 @@ export interface Group {
     groupMembers: GroupMember[];
     posts: Post[]
     tasks: Task[];
+    group_members_count?: number
 };
 
 export interface GroupMember {

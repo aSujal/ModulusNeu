@@ -75,8 +75,6 @@ const InviteModal = ({ open, setOpen, name, groupId }: InviteModalProps) => {
                         onClick={handleNewCode}
                     >
                         Generate code
-
-
                         <RefreshCcw className="ml-2 size-4" />
                     </Button>
                     <DialogClose asChild>
