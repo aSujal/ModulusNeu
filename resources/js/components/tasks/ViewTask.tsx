@@ -83,7 +83,7 @@ export function ViewTaskDialog({ children, groupId, task, isAdmin }: CreateViewD
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent className="flex flex-col sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
+            <DialogContent className="px-4 py-6 w-full max-w-[90vw] sm:max-w-[800px] max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <div className="flex items-center gap-2">
                         <DialogTitle className="text-xl">{task.title}</DialogTitle>
@@ -97,9 +97,9 @@ export function ViewTaskDialog({ children, groupId, task, isAdmin }: CreateViewD
                 </DialogHeader>
 
                 <Tabs defaultValue="details" value={activeTab} onValueChange={setActiveTab} className="flex-1">
-                    <TabsList className={`grid grid-cols-2 w-full`}>
-                        <TabsTrigger value="details">Task Details</TabsTrigger>
-                        <TabsTrigger value="responses">Responses</TabsTrigger>
+                    <TabsList className={`grid grid-cols-2`}>
+                        <TabsTrigger className="break-words" value="details">Task Details</TabsTrigger>
+                        <TabsTrigger className="break-words" value="responses">Responses</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="details" className="flex flex-col flex-1 overflow-hidden">
@@ -121,9 +121,8 @@ export function ViewTaskDialog({ children, groupId, task, isAdmin }: CreateViewD
                                         <h3 className="font-medium text-sm">Attachments</h3>
                                         <div className="space-y-2">
                                             <div className="flex items-center gap-2 p-2 border rounded-md">
-
                                                 <FileText className="w-4 h-4 text-muted-foreground" />
-                                                <div className="flex-1 text-sm truncate">{task.file}</div>
+                                                <div className="flex-1 max-w-20 sm:max-w-full text-sm truncate">{task.file}</div>
                                                 <Button asChild size="sm" variant="outline" className="flex items-center gap-2">
                                                     <a href={`${window.location.origin}/tasks/files/${task.file.split('/').pop()?.replace(/\.[^/.]+$/, "")}`}
                                                         target="_blank"
@@ -143,7 +142,7 @@ export function ViewTaskDialog({ children, groupId, task, isAdmin }: CreateViewD
 
                         {!hasSubmitted || isAdmin ? (
                             <div className="mt-6 pt-4 border-t">
-                                <form onSubmit={handleSubmit} className="space-y-4">
+                                <form onSubmit={handleSubmit} className="space-y-4 text-sm">
                                     <div className="space-y-2">
                                         <Label htmlFor="response">Your Response</Label>
                                         <RichTextEditor onChange={handleEditorChange} placeholder="Write your response here..." />
@@ -156,7 +155,7 @@ export function ViewTaskDialog({ children, groupId, task, isAdmin }: CreateViewD
                                         <FileUploader files={files} setFiles={setFiles} maxFiles={1} maxSize={5} />
                                     </div>
                                     <div className="flex justify-end">
-                                        <Button type="submit" disabled={!response.trim()}>
+                                        <Button type="submit" className="w-full sm:w-auto" disabled={!response.trim()}>
                                             <Send className="mr-2 w-4 h-4" />
                                             Submit Response
                                         </Button>
@@ -171,9 +170,7 @@ export function ViewTaskDialog({ children, groupId, task, isAdmin }: CreateViewD
                     </TabsContent>
 
                     <TabsContent value="responses" className="flex flex-col flex-1 overflow-hidden">
-                        <ScrollArea className="flex-1 pr-4">
-                            <TaskResponse task={task} isAdmin={isAdmin} groupId={groupId} />
-                        </ScrollArea>
+                        <TaskResponse task={task} isAdmin={isAdmin} groupId={groupId} />
                     </TabsContent>
                 </Tabs>
             </DialogContent>

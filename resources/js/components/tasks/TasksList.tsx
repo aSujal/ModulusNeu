@@ -111,7 +111,7 @@ const TasksList = ({
                                 <h4 className="mb-2 font-medium text-sm">Attachments</h4>
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-2 p-2 border rounded-md">
-                                        <div className="flex-1 text-sm truncate">{task.file}</div>
+                                        <div className="flex-1 max-w-20 sm:max-w-full text-sm truncate">{task.file}</div>
                                         <Button size="sm" variant="outline">
                                             <a href={`${window.location.origin}/tasks/files/${task.file.split('/').pop()?.replace(/\.[^/.]+$/, "")}`}
                                                 target="_blank"

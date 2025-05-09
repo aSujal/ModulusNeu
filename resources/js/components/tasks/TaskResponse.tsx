@@ -92,37 +92,26 @@ export default function TaskResponse({
                 {task.responses && task.responses.length > 0 ? (
                     <div className="space-y-6">
                         {task.responses.map((response, index) => (
-                            <div key={index} className="bg-card shadow-sm p-4 border rounded-lg">
-                                <div className="flex justify-between">
-                                    <div className="flex items-center gap-3 mb-3">
+                            <div key={index} className="space-y-4 bg-card shadow-sm p-4 border rounded-lg">
+                                <div className="flex sm:flex-row justify-between gap-4">
+                                    <div className="flex items-center gap-3">
                                         <Avatar className="w-8 h-8">
                                             <AvatarFallback>{response?.user?.full_name?.charAt(0) ?? "?"}</AvatarFallback>
                                         </Avatar>
                                         <div>
-                                            <div className="flex items-center gap-2">
-                                                <div className="font-medium text-sm">{response.user?.full_name ?? "no user found"}</div>
-                                            </div>
+                                            <div className="font-medium text-sm break-words">{response.user?.full_name ?? "no user found"}</div>
                                             <div className="text-muted-foreground text-xs">
                                                 {formatDistanceToNow(new Date(response?.created_at), { addSuffix: true })}
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-2">
-                                        {/* Score display */}
+                                    <div className="flex flex-wrap sm:flex-nowrap items-center gap-2">
                                         {response.score !== null ? (
-                                            <div className="flex items-center">
-                                                <Badge
-                                                    className="mr-2"
-                                                >
-                                                    {response.score}/{task.max_score}
-                                                </Badge>
-                                            </div>
+                                            <Badge className="mr-2">{response.score}/{task.max_score}</Badge>
                                         ) : (
                                             <Badge variant="outline" className="mr-2">Not Graded</Badge>
                                         )}
-
-                                        {/* Admin scoring dialog */}
                                         {isAdmin && (
                                             <Dialog>
                                                 <DialogTrigger asChild>
@@ -205,10 +194,10 @@ export default function TaskResponse({
                                     </div>
                                 </div>
 
-                                <div
-                                    className="max-w-none prose prose-sm"
-                                    dangerouslySetInnerHTML={{ __html: response.text }}
-                                />
+                                <div className="max-w-none break-words prose prose-sm">
+                                    <div dangerouslySetInnerHTML={{ __html: response.text }} />
+                                </div>
+
 
                                 {response.file && (
                                     <div className="mt-4 pt-4 border-t">
